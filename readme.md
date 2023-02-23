@@ -1,4 +1,12 @@
-basado en la matriz de eisenhower
+# Matriz de Eisenhower - Prioriza tu tiempo y logra tus metas
 
-- [] aplicar estilos
+Descripción:
+
+Este repositorio te ayuda a implementar la matriz de Eisenhower para organizar tu lista de tareas, priorizar tus actividades y optimizar tu tiempo.
+
+# pending
+
 - [] seprar func firebase
+- [] maybe add ts?
+- [] add notifacations
+- [] test on android

@@ -57,3 +57,24 @@ eas build -p android
 cambiar en app.json->expo->"version"
 npm run start
 expo start
+
+
+fixex
+export NODE_OPTIONS="--openssl-legacy-provider" -> error node18
+
+
+#instlacion de android sdk en linux
+- sudo apt install android-sdk-platform-tools
+- descarga android sdk 
+    - https://developer.android.com/studio/index.html#command-tools
+- extraerlo aca /home/fmarcosdev/Android/sdk 
+    - instalar aca /bin -> ./studio.sh
+- exportar varaible
+   - editar .zshrc -> agregar: export ANDROID_HOME="/home/fmarcosdev/Android/Sdk"
+- probar (opcional)
+    - en consola-> emulator
+    - ingresa a la carpeta /bin y hacemos "./studio.sh" -> crea emulador y ya funcionara expo bien.
+
+
+
+
