@@ -1,12 +1,13 @@
-import { Text, View, Box } from "native-base";
+import { Text, View, Box, useToast } from "native-base";
 import { FlatList, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { handleDeleteByList, handleDeleteList } from "../../../lib/helpers";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { MyContext } from "../../../lib/Context";
 
 export const ListOfLists = () => {
+  const toast = useToast();
   const { boxData, refetchBoxData } = useContext(MyContext);
 
   const titlesInList = Object.keys(boxData || {});
@@ -40,7 +41,7 @@ export const ListOfLists = () => {
                 <Text
                   style={styles.listTitle}
                   onPress={() => {
-                    handleDeleteList(t, boxData, refetchBoxData);
+                    handleDeleteList(t, boxData, refetchBoxData, toast);
                   }}
                 >
                   {t}
@@ -58,7 +59,12 @@ export const ListOfLists = () => {
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={() => {
-                      handleDeleteByList({ item, t }, boxData, refetchBoxData);
+                      handleDeleteByList(
+                        { item, t },
+                        boxData,
+                        refetchBoxData,
+                        toast
+                      );
                     }}
                     style={styles.listItem}
                   >

@@ -1,5 +1,5 @@
 import { ref, set } from "@firebase/database";
-import { Button, Input, Modal, Text } from "native-base";
+import { Button, Input, Modal, Text, useToast } from "native-base";
 import { useContext, useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { Alert } from "react-native";
@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
 });
 
 export const ModalAddList = ({ compactSize = false }) => {
+  const toast = useToast();
   const { boxData = [], refetchBoxData } = useContext(MyContext);
   const { CloseButton, Content, Body, Header, Footer } = Modal;
   const [titleOfList, setTitleOfList] = useState("");
@@ -58,6 +59,10 @@ export const ModalAddList = ({ compactSize = false }) => {
 
     setTitleOfList("");
     setDescriptionOfList("");
+    toast.show({
+      description: "LISTA CREADA",
+      placement: "top",
+    });
   };
 
   return (

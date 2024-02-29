@@ -1,4 +1,4 @@
-import { SectionList } from "native-base";
+import { SectionList, useToast } from "native-base";
 
 import {
   Dimensions,
@@ -11,7 +11,8 @@ import { handleDeleteByItem } from "../../../lib/helpers";
 import { MyContext } from "../../../lib/Context";
 import { useContext } from "react";
 
-export const Matriz = ({ setMainLists }) => {
+export const Matriz = () => {
+  const toast = useToast();
   const { boxData, refetchBoxData } = useContext(MyContext);
   const screenWidth = Dimensions.get("window").width;
   const styles = StyleSheet.create({
@@ -162,7 +163,7 @@ export const Matriz = ({ setMainLists }) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
-                  handleDeleteByItem(item, boxData, setMainLists);
+                  handleDeleteByItem(item, boxData, refetchBoxData);
                 }}
                 style={styles.itemContainer}
               >
@@ -250,7 +251,7 @@ export const Matriz = ({ setMainLists }) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
-                  handleDeleteByItem(item, boxData, setMainLists);
+                  handleDeleteByItem(item, boxData, refetchBoxData);
                 }}
                 style={styles.itemContainer}
               >
@@ -306,7 +307,7 @@ export const Matriz = ({ setMainLists }) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
-                  handleDeleteByItem(item, boxData, setMainLists);
+                  handleDeleteByItem(item, boxData, refetchBoxData);
                 }}
                 style={styles.itemContainer}
               >
@@ -337,7 +338,7 @@ export const Matriz = ({ setMainLists }) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 onPress={() => {
-                  handleDeleteByItem(item, boxData, setMainLists);
+                  handleDeleteByItem(item, boxData, refetchBoxData, toast);
                 }}
                 style={styles.itemContainer}
               >

@@ -44,6 +44,7 @@ export const ModalAddItem = () => {
       placement: "top",
     });
     refetchBoxData();
+    setModalVisible(false);
 
     onChangeText((prev) => {
       return {
