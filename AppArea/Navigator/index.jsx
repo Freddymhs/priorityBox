@@ -16,7 +16,7 @@ export const Navigator = () => {
         drawerContent={(navigatorProps) => (
           <CustomSidebar {...navigatorProps} />
         )}
-        initialRouteName="LISTAS"
+        initialRouteName="MATRIZ"
         screenOptions={{
           drawerType: "front",
           drawerStyle: {

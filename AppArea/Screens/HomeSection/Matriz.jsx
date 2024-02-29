@@ -87,7 +87,7 @@ export const Matriz = () => {
         >
           <Text
             style={{
-              fontWeight: "bold",
+              fontWeight: "800",
               color: "#215055",
             }}
           >
@@ -108,49 +108,31 @@ export const Matriz = () => {
               alignSelf: "center",
             }}
           >
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               R
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               E
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               L
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               E
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               V
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               A
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               N
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               T
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               E
             </Text>
           </View>
@@ -191,54 +173,34 @@ export const Matriz = () => {
               alignSelf: "center",
             }}
           >
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               I
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               R
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               E
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               L
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               E
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               V
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               A
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               N
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               T
             </Text>
-            <Text
-              style={{ fontSize: 13, fontWeight: "bold", color: "#215055" }}
-            >
+            <Text style={{ fontSize: 13, fontWeight: "900", color: "#215055" }}>
               E
             </Text>
           </View>
@@ -282,7 +244,7 @@ export const Matriz = () => {
         >
           <Text
             style={{
-              fontWeight: "bold",
+              fontWeight: "800",
               color: "#215055",
             }}
           >
