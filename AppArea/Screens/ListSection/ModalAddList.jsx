@@ -1,69 +1,72 @@
-import { ref, set } from "@firebase/database";
 import { Button, Input, Modal, Text, useToast } from "native-base";
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { Alert } from "react-native";
-import { db } from "../../../lib/init-firebase";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { MyContext } from "../../../lib/Context";
+import { useLists } from "../../../lib/hooks";
+import {
+  COLORS,
+  COMMON_STYLES,
+  BORDER_RADIUS,
+  SPACING,
+  FONT_SIZES,
+} from "../../../lib/constants/theme";
 
 const styles = StyleSheet.create({
-  header: { backgroundColor: "#62EFFF", borderColor: "#62EFFF" },
-  body: { backgroundColor: "#62EFFF" },
-  footer: { backgroundColor: "#62EFFF", borderColor: "#62EFFF" },
+  header: COMMON_STYLES.modal.header,
+  body: COMMON_STYLES.modal.body,
+  footer: COMMON_STYLES.modal.footer,
   button: {
-    backgroundColor: "#215055",
-    borderRadius: 8,
-    padding: 10,
+    ...COMMON_STYLES.button,
     width: 233,
     height: 55,
     alignSelf: "center",
-    marginBottom: 11,
+    marginBottom: SPACING.md,
   },
-  textButton: { fontSize: 18, fontWeight: "bold", color: "white" },
+  textButton: {
+    ...COMMON_STYLES.buttonText,
+  },
   buttonGroup: {
-    backgroundColor: "#215055",
-    borderRadius: 8,
-    padding: 10,
+    ...COMMON_STYLES.button,
     alignSelf: "center",
   },
-  textButtonGroup: { fontSize: 18, color: "white" },
+  textButtonGroup: {
+    fontSize: FONT_SIZES.title,
+    color: COLORS.textLight,
+  },
 });
 
 export const ModalAddList = ({ compactSize = false }) => {
   const toast = useToast();
   const { boxData = [], refetchBoxData } = useContext(MyContext);
   const { CloseButton, Content, Body, Header, Footer } = Modal;
+
+  // Hook SOLID
+  const { createList, isLoading } = useLists(boxData, refetchBoxData);
+
   const [titleOfList, setTitleOfList] = useState("");
   const [descriptionOfList, setDescriptionOfList] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const createNewList = () => {
-    if (titleOfList?.length < 1 || descriptionOfList?.length < 1) {
-      Alert.alert("No es valido un campo vacio");
-      return;
-    }
-    if (boxData?.[titleOfList]) {
-      console.log("2");
-      Alert.alert("esta lista ya existe");
-      return;
-    }
 
-    const listToAdd = {
-      ...boxData,
-      [titleOfList]: { description: descriptionOfList || "", items: [{}] },
-    };
-
-    set(ref(db, "/listas"), listToAdd);
-    refetchBoxData();
-    setModalVisible(false);
-
+  const resetForm = useCallback(() => {
     setTitleOfList("");
     setDescriptionOfList("");
-    toast.show({
-      description: "LISTA CREADA",
-      placement: "top",
-    });
-  };
+  }, []);
+
+  const handleCreateList = useCallback(async () => {
+    const result = await createList(titleOfList, descriptionOfList);
+
+    if (result.success) {
+      setModalVisible(false);
+      resetForm();
+      toast.show({
+        description: "LISTA CREADA",
+        placement: "top",
+      });
+    } else {
+      Alert.alert("Error", result.error || "Error al crear la lista");
+    }
+  }, [titleOfList, descriptionOfList, createList, toast, resetForm]);
 
   return (
     <>
@@ -71,9 +74,7 @@ export const ModalAddList = ({ compactSize = false }) => {
         animationType="slide"
         transparent={true}
         isOpen={modalVisible}
-        onClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onClose={() => setModalVisible(false)}
       >
         <Content maxWidth="720px">
           <CloseButton />
@@ -90,7 +91,8 @@ export const ModalAddList = ({ compactSize = false }) => {
           <Footer style={styles.footer}>
             <FooterButtons
               setModalVisible={setModalVisible}
-              createNewList={createNewList}
+              createNewList={handleCreateList}
+              isLoading={isLoading}
             />
           </Footer>
         </Content>
@@ -100,7 +102,7 @@ export const ModalAddList = ({ compactSize = false }) => {
         <FontAwesome
           name="plus-square"
           size={32}
-          color="#215055"
+          color={COLORS.primaryDark}
           onPress={() => setModalVisible(true)}
         />
       ) : (
@@ -112,31 +114,28 @@ export const ModalAddList = ({ compactSize = false }) => {
   );
 };
 
-const FooterButtons = ({ setModalVisible, createNewList }) => {
+const FooterButtons = ({ setModalVisible, createNewList, isLoading }) => {
   const { Group } = Button;
   return (
     <Group space={2}>
       <Button
         style={styles.buttonGroup}
         variant="ghost"
-        onPress={() => {
-          setModalVisible(false);
-        }}
+        onPress={() => setModalVisible(false)}
       >
         <Text style={styles.textButtonGroup}>
-          <FontAwesome name="close" size={21} color="white" />
+          <FontAwesome name="close" size={21} color={COLORS.textLight} />
           Cancelar
         </Text>
       </Button>
       <Button
         style={styles.buttonGroup}
-        onPress={() => {
-          createNewList();
-        }}
+        isDisabled={isLoading}
+        onPress={createNewList}
       >
         <Text style={styles.textButtonGroup}>
-          <FontAwesome name="check" size={21} color="white" />
-          Guardar
+          <FontAwesome name="check" size={21} color={COLORS.textLight} />
+          {isLoading ? "Guardando..." : "Guardar"}
         </Text>
       </Button>
     </Group>
@@ -152,23 +151,19 @@ const ModalBodyInputs = ({
   return (
     <>
       <Input
-        borderColor="#215055"
-        placeholderTextColor="#34656A"
-        onChangeText={(e) => {
-          setTitleOfList(e);
-        }}
+        borderColor={COLORS.primaryDark}
+        placeholderTextColor={COLORS.textSecondary}
+        onChangeText={setTitleOfList}
         value={titleOfList}
         w="100%"
         placeholder="nombre"
       />
       <Input
-        borderColor="#215055"
-        placeholderTextColor="#34656A"
+        borderColor={COLORS.primaryDark}
+        placeholderTextColor={COLORS.textSecondary}
         w="100%"
         h="20"
-        onChangeText={(e) => {
-          setDescriptionOfList(e);
-        }}
+        onChangeText={setDescriptionOfList}
         value={descriptionOfList}
         placeholder="descripcion"
       />

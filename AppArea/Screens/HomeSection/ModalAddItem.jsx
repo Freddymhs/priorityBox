@@ -1,200 +1,198 @@
-import { onValue, ref, set } from "firebase/database";
-import { Button, Modal, View, Select } from "native-base";
+import {
+  Button,
+  Modal,
+  View,
+  Select,
+  CheckIcon,
+  useToast,
+  Input,
+} from "native-base";
 import { FontAwesome } from "@expo/vector-icons";
-import { CheckIcon } from "native-base";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import { Text, Alert } from "react-native";
-import { useToast, Input } from "native-base";
-import { db } from "../../../lib/init-firebase";
 import { ModalAddList } from "../ListSection/ModalAddList";
 import { MyContext } from "../../../lib/Context";
+import { useItems, useLists } from "../../../lib/hooks";
+import { SELECT_OPTIONS } from "../../../lib/constants/matrix";
+import { COLORS, COMMON_STYLES } from "../../../lib/constants/theme";
 
 export const ModalAddItem = () => {
   const toast = useToast();
   const [modalVisible, setModalVisible] = useState(false);
   const { boxData, refetchBoxData } = useContext(MyContext);
-  const [listNames, setListNames] = useState([]); // disponibles
 
-  useEffect(() => {
-    setListNames(Object?.keys(boxData || []));
-  }, [boxData]);
+  // Hooks SOLID
+  const { addItem, createItem, isLoading } = useItems(boxData, refetchBoxData);
+  const { getListNames } = useLists(boxData, refetchBoxData);
 
-  const [text, onChangeText] = useState({
-    name: "",
-    priority: "bajo",
-    type: "deseo",
-  });
+  const [listNames, setListNames] = useState([]);
+  const [formData, setFormData] = useState(() => createItem());
   const [selectedList, setSelectedList] = useState(null);
 
-  const addItemInList = () => {
-    if (
-      text?.name?.length < 1 ||
-      selectedList === null ||
-      text?.type?.length === null ||
-      text?.priority?.length === null
-    ) {
-      Alert.alert("complete todos los campos vacios");
+  useEffect(() => {
+    setListNames(getListNames());
+  }, [boxData, getListNames]);
+
+  const updateField = useCallback((field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  }, []);
+
+  const resetForm = useCallback(() => {
+    setFormData(createItem());
+    setSelectedList(null);
+  }, [createItem]);
+
+  const handleSubmit = useCallback(async () => {
+    // Validación básica
+    if (!formData.name || formData.name.trim().length === 0) {
+      Alert.alert("Error", "El nombre es requerido");
       return;
     }
 
-    const newPosition = boxData[selectedList]?.items?.length || 0;
-    set(ref(db, `/listas/${selectedList}/items/${newPosition}`), text);
-    toast.show({
-      description: "TAREA AGREGADA",
-      placement: "top",
-    });
-    refetchBoxData();
-    setModalVisible(false);
+    if (!selectedList) {
+      Alert.alert("Error", "Seleccione una lista");
+      return;
+    }
 
-    onChangeText((prev) => {
-      return {
-        ...prev,
-        name: null,
-      };
-    });
-  };
-  // const completedForm = text?.name?.length < 1 || selectedList === null || type;
+    const result = await addItem(selectedList, formData);
+
+    if (result.success) {
+      toast.show({
+        description: "TAREA AGREGADA",
+        placement: "top",
+      });
+      setModalVisible(false);
+      resetForm();
+    } else {
+      Alert.alert("Error", result.error || "Error al agregar el item");
+    }
+  }, [formData, selectedList, addItem, toast, resetForm]);
   return (
-    <View backgroundColor="#62EFFF" marginBottom={11}>
-      <Text>{listNames}</Text>
+    <View backgroundColor={COLORS.background} marginBottom={11}>
       <Button
         style={{
-          backgroundColor: "#215055",
-          borderRadius: 8,
-          padding: 10,
+          ...COMMON_STYLES.button,
           width: 233,
           height: 55,
           alignSelf: "center",
         }}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={{ fontSize: 18, fontWeight: "bold", color: "white" }}>
-          Crear Item
-        </Text>
+        <Text style={COMMON_STYLES.buttonText}>Crear Itesssm</Text>
       </Button>
 
       <Modal
         animationType="slide"
         transparent={true}
         isOpen={modalVisible}
-        onClose={() => {
-          setModalVisible(!modalVisible);
-        }}
+        onClose={() => setModalVisible(false)}
       >
         <Modal.Content maxWidth="720px">
           <Modal.CloseButton />
-          <Modal.Header
-            style={{ backgroundColor: "#62EFFF", borderColor: "#62EFFF" }}
-          >
+          <Modal.Header style={COMMON_STYLES.modal.header}>
             Nuevo Item
           </Modal.Header>
-          <Modal.Body style={{ backgroundColor: "#62EFFF" }}>
+          <Modal.Body style={COMMON_STYLES.modal.body}>
             <Input
-              borderColor="#215055"
-              placeholderTextColor="#34656A"
+              borderColor={COLORS.primaryDark}
+              placeholderTextColor={COLORS.textSecondary}
               w="100%"
-              onChangeText={(e) => {
-                onChangeText((prev) => {
-                  return { ...prev, name: e };
-                });
-              }}
-              value={text.name}
+              onChangeText={(value) => updateField("name", value)}
+              value={formData.name}
               placeholder="Asigne un nombre"
             />
             <View style={{ flexDirection: "row" }}>
               <Select
                 flex={5}
-                borderColor="#215055"
-                placeholderTextColor="#34656A"
+                borderColor={COLORS.primaryDark}
+                placeholderTextColor={COLORS.textSecondary}
                 w="100%"
                 selectedValue={selectedList}
                 defaultValue={selectedList}
-                onValueChange={(itemValue) => setSelectedList(itemValue)}
+                onValueChange={setSelectedList}
                 placeholder="A que lista agregar este item?"
                 _selectedItem={{ bg: "cyan.600" }}
               >
-                {listNames?.map((name, i) => {
-                  return <Select.Item label={name} value={name} key={i} />;
-                })}
+                {listNames?.map((name, i) => (
+                  <Select.Item label={name} value={name} key={i} />
+                ))}
               </Select>
               {ModalAddList({ compactSize: true })}
             </View>
             <Select
-              borderColor="#215055"
-              placeholderTextColor="#34656A"
+              borderColor={COLORS.primaryDark}
+              placeholderTextColor={COLORS.textSecondary}
               w="100%"
-              selectedValue={text.type}
+              selectedValue={formData.type}
               minWidth={200}
               placeholder="Deseo o prioridad?"
-              onValueChange={(itemValue) =>
-                onChangeText((prev) => ({ ...prev, type: itemValue }))
-              }
+              onValueChange={(value) => updateField("type", value)}
             >
-              <Select.Item label="necesidad" value="necesidad" />
-              <Select.Item label="deseo" value="deseo" />
+              {SELECT_OPTIONS.TYPE.map((opt) => (
+                <Select.Item
+                  key={opt.value}
+                  label={opt.label}
+                  value={opt.value}
+                />
+              ))}
             </Select>
             <Select
-              borderColor="#215055"
-              placeholderTextColor="#34656A"
+              borderColor={COLORS.primaryDark}
+              placeholderTextColor={COLORS.textSecondary}
               w="100%"
-              selectedValue={text.priority}
+              selectedValue={formData.priority}
               minWidth={200}
-              placeholder="Nivel de relevancia "
-              onValueChange={(itemValue) =>
-                onChangeText((prev) => ({ ...prev, priority: itemValue }))
-              }
+              placeholder="Nivel de relevancia"
+              onValueChange={(value) => updateField("priority", value)}
               _selectedItem={{
                 bg: "cyan.600",
                 endIcon: <CheckIcon size={4} />,
               }}
             >
-              <Select.Item label="Muy Importante" value="alto" />
-              <Select.Item label="Poco Importante" value="bajo" />
+              {SELECT_OPTIONS.PRIORITY.map((opt) => (
+                <Select.Item
+                  key={opt.value}
+                  label={opt.label}
+                  value={opt.value}
+                />
+              ))}
             </Select>
           </Modal.Body>
 
-          <Modal.Footer
-            style={{ backgroundColor: "#62EFFF", borderColor: "#62EFFF" }}
-          >
+          <Modal.Footer style={COMMON_STYLES.modal.footer}>
             <Button.Group>
               <Button
                 style={{
-                  backgroundColor: "#215055",
-                  borderRadius: 8,
-                  padding: 10,
+                  ...COMMON_STYLES.button,
                   alignSelf: "center",
                 }}
-                onPress={() => {
-                  setModalVisible(false);
-                }}
+                onPress={() => setModalVisible(false)}
               >
-                <Text
-                  style={{
-                    color: "#215055",
-                  }}
-                >
-                  <Text style={{ fontSize: 18, color: "white" }}>
-                    <FontAwesome name="close" size={21} color="white" />
-                    Cancelar
-                  </Text>
+                <Text style={{ fontSize: 18, color: COLORS.textLight }}>
+                  <FontAwesome
+                    name="close"
+                    size={21}
+                    color={COLORS.textLight}
+                  />
+                  Cancelar
                 </Text>
               </Button>
               <Button
-                // isDisabled={completedForm}
+                isDisabled={isLoading}
                 style={{
-                  backgroundColor: "#215055",
-                  borderRadius: 8,
-                  padding: 10,
+                  ...COMMON_STYLES.button,
                   alignSelf: "center",
                   flexDirection: "row",
                 }}
-                onPress={() => {
-                  addItemInList();
-                }}
+                onPress={handleSubmit}
               >
-                <Text style={{ fontSize: 18, color: "white" }}>
-                  <FontAwesome name="check" size={21} color="white" />
-                  Guardar
+                <Text style={{ fontSize: 18, color: COLORS.textLight }}>
+                  <FontAwesome
+                    name="check"
+                    size={21}
+                    color={COLORS.textLight}
+                  />
+                  {isLoading ? "Guardando..." : "Guardar"}
                 </Text>
               </Button>
             </Button.Group>

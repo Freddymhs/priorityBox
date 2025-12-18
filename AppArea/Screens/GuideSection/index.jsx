@@ -1,21 +1,26 @@
 import * as React from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { StyleSheet } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
-import { View } from "native-base";
-import { Center, Text } from "native-base";
+import { View, Center, Text } from "native-base";
+import { SafeContainer } from "../../Components/SafeContainer";
+
 const styles = StyleSheet.create({
+  safeContainer: {
+    backgroundColor: "#62EFFF",
+  },
   container: {
     flex: 12,
-    backgroundColor: "#62EFFF",
   },
   timeline: {
     width: "81%",
   },
   space: {
     flex: 1,
-    backgroundColor: "#62EFFF",
+  },
+  homeButton: {
+    flex: 1,
+    paddingTop: 67,
   },
   title: { color: "#215055", fontWeight: "bold", fontSize: 17 },
   description: { color: "#215055" },
@@ -72,7 +77,7 @@ const data = [
 
 export default function GuideSection({ navigation }) {
   return (
-    <>
+    <SafeContainer style={styles.safeContainer}>
       <View style={styles.space}></View>
       <View style={styles.container}>
         <Timeline
@@ -82,7 +87,7 @@ export default function GuideSection({ navigation }) {
           circleColor="#215055"
         />
       </View>
-      <Center style={{ flex: 1, paddingTop: 67, backgroundColor: "#62EFFF" }}>
+      <Center style={styles.homeButton}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={{ flex: 1 }}
@@ -90,6 +95,6 @@ export default function GuideSection({ navigation }) {
           <FontAwesome name="home" size={24} color="#215055" />
         </TouchableOpacity>
       </Center>
-    </>
+    </SafeContainer>
   );
 }

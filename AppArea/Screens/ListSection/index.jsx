@@ -1,19 +1,21 @@
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { SafeContainer } from "../../Components/SafeContainer";
 import { ModalAddList } from "./ModalAddList";
 import { ListOfLists } from "./ListOfLists";
-import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  topSection: { flex: 9, backgroundColor: "#62EFFF" },
-
-  bottomSection: {
+  container: {
     backgroundColor: "#62EFFF",
   },
+  topSection: {
+    flex: 9,
+  },
+  bottomSection: {},
 });
 
 export default ListSection = () => {
   return (
-    <>
+    <SafeContainer style={styles.container}>
       <View style={styles.topSection}>
         <ListOfLists />
       </View>
@@ -21,6 +23,6 @@ export default ListSection = () => {
       <View style={styles.bottomSection}>
         <ModalAddList />
       </View>
-    </>
+    </SafeContainer>
   );
 };
