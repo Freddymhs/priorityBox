@@ -12,3 +12,18 @@ web-build/
 
 # macOS
 .DS_Store
+
+# Firebase credentials (SECURITY)
+google-services.json
+
+# Yarn Berry cache
+.yarn/cache
+.yarn/install-state.gz
+.yarn/unplugged
+
+# Temporary files
+agregar-listas-ejemplo.json
+WAYDROID-SETUP.md
+
+# MCP metadata (optional)
+.serena/
