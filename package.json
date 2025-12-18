@@ -4,8 +4,7 @@
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "npx kill-port 8080 && ./run-android-waydroid.sh",
-    "android:waydroid": "./run-android-waydroid.sh",
+    "android": "./run-android-waydroid.sh",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "firebase:init": "node scripts/init-firebase-data.js"
