@@ -3,18 +3,25 @@ import {
   Modal,
   View,
   Select,
-  CheckIcon,
   useToast,
   Input,
 } from "native-base";
-import { FontAwesome } from "@expo/vector-icons";
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { Text, Alert } from "react-native";
+import { Text, Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { ModalAddList } from "../ListSection/ModalAddList";
 import { MyContext } from "../../../lib/Context";
 import { useItems, useLists } from "../../../lib/hooks";
 import { SELECT_OPTIONS } from "../../../lib/constants/matrix";
-import { COLORS, COMMON_STYLES } from "../../../lib/constants/theme";
+import {
+  COLORS,
+  COMMON_STYLES,
+  COMPONENT_STYLES,
+  INPUT_STATES,
+  MODAL_PROPS,
+  COMPONENT_PROPS,
+} from "../../../lib/constants/theme";
+
+const styles = COMPONENT_STYLES.ModalAddItem;
 
 export const ModalAddItem = () => {
   const toast = useToast();
@@ -64,21 +71,16 @@ export const ModalAddItem = () => {
       setModalVisible(false);
       resetForm();
     } else {
-      Alert.alert("Error", result.error || "Error al agregar el item");
+      Alert.alert("Error", result.error || "Error al agregar el elemento");
     }
   }, [formData, selectedList, addItem, toast, resetForm]);
   return (
-    <View backgroundColor={COLORS.background} marginBottom={11}>
+    <View style={styles.container}>
       <Button
-        style={{
-          ...COMMON_STYLES.button,
-          width: 233,
-          height: 55,
-          alignSelf: "center",
-        }}
+        style={styles.createButton}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={COMMON_STYLES.buttonText}>Crear Itesssm</Text>
+        <Text style={styles.createButtonText}>Crear elemento</Text>
       </Button>
 
       <Modal
@@ -87,45 +89,55 @@ export const ModalAddItem = () => {
         isOpen={modalVisible}
         onClose={() => setModalVisible(false)}
       >
-        <Modal.Content maxWidth="720px">
-          <Modal.CloseButton />
-          <Modal.Header style={COMMON_STYLES.modal.header}>
-            Nuevo Item
-          </Modal.Header>
-          <Modal.Body style={COMMON_STYLES.modal.body}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "android" ? "padding" : "height"}
+          enabled
+          style={{ flex: 1, justifyContent: "center" }}
+        >
+          <Modal.Content maxWidth={MODAL_PROPS.maxWidth} bg={MODAL_PROPS.contentBg}>
+            <Modal.CloseButton />
+            <Modal.Header style={COMMON_STYLES.modal.header}>
+              <Text style={styles.modalHeader}>Nuevo elemento</Text>
+            </Modal.Header>
+            <Modal.Body style={COMMON_STYLES.modal.body}>
+              <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
             <Input
-              borderColor={COLORS.primaryDark}
-              placeholderTextColor={COLORS.textSecondary}
-              w="100%"
+              variant="unstyled"
+              style={COMMON_STYLES.input}
+              _focus={INPUT_STATES.focusStyle}
               onChangeText={(value) => updateField("name", value)}
               value={formData.name}
               placeholder="Asigne un nombre"
+              placeholderTextColor={COLORS.textMuted}
             />
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.modalBodyRow}>
               <Select
                 flex={5}
-                borderColor={COLORS.primaryDark}
-                placeholderTextColor={COLORS.textSecondary}
-                w="100%"
+                borderWidth={0}
+                bg={COMPONENT_PROPS.selectBg}
+                style={styles.selectRow}
                 selectedValue={selectedList}
                 defaultValue={selectedList}
                 onValueChange={setSelectedList}
-                placeholder="A que lista agregar este item?"
-                _selectedItem={{ bg: "cyan.600" }}
+                placeholder="¿A qué lista agregar este elemento?"
+                placeholderTextColor={COLORS.textMuted}
+                _selectedItem={INPUT_STATES.selectedItemStyle}
               >
                 {listNames?.map((name, i) => (
                   <Select.Item label={name} value={name} key={i} />
                 ))}
               </Select>
-              {ModalAddList({ compactSize: true })}
+              <View style={styles.marginLeftSmall}>
+                <ModalAddList compactSize={true} />
+              </View>
             </View>
             <Select
-              borderColor={COLORS.primaryDark}
-              placeholderTextColor={COLORS.textSecondary}
-              w="100%"
+              borderWidth={0}
+              bg={COMPONENT_PROPS.selectBg}
+              style={styles.selectRow}
               selectedValue={formData.type}
               minWidth={200}
-              placeholder="Deseo o prioridad?"
+              placeholder="¿Deseo o necesidad?"
               onValueChange={(value) => updateField("type", value)}
             >
               {SELECT_OPTIONS.TYPE.map((opt) => (
@@ -137,17 +149,14 @@ export const ModalAddItem = () => {
               ))}
             </Select>
             <Select
-              borderColor={COLORS.primaryDark}
-              placeholderTextColor={COLORS.textSecondary}
-              w="100%"
+              borderWidth={0}
+              bg={COMPONENT_PROPS.selectBg}
+              style={styles.selectRow}
               selectedValue={formData.priority}
               minWidth={200}
               placeholder="Nivel de relevancia"
               onValueChange={(value) => updateField("priority", value)}
-              _selectedItem={{
-                bg: "cyan.600",
-                endIcon: <CheckIcon size={4} />,
-              }}
+              _selectedItem={INPUT_STATES.selectedItemStyle}
             >
               {SELECT_OPTIONS.PRIORITY.map((opt) => (
                 <Select.Item
@@ -157,47 +166,30 @@ export const ModalAddItem = () => {
                 />
               ))}
             </Select>
-          </Modal.Body>
+              </ScrollView>
+            </Modal.Body>
 
-          <Modal.Footer style={COMMON_STYLES.modal.footer}>
-            <Button.Group>
-              <Button
-                style={{
-                  ...COMMON_STYLES.button,
-                  alignSelf: "center",
-                }}
-                onPress={() => setModalVisible(false)}
-              >
-                <Text style={{ fontSize: 18, color: COLORS.textLight }}>
-                  <FontAwesome
-                    name="close"
-                    size={21}
-                    color={COLORS.textLight}
-                  />
-                  Cancelar
-                </Text>
-              </Button>
-              <Button
-                isDisabled={isLoading}
-                style={{
-                  ...COMMON_STYLES.button,
-                  alignSelf: "center",
-                  flexDirection: "row",
-                }}
-                onPress={handleSubmit}
-              >
-                <Text style={{ fontSize: 18, color: COLORS.textLight }}>
-                  <FontAwesome
-                    name="check"
-                    size={21}
-                    color={COLORS.textLight}
-                  />
-                  {isLoading ? "Guardando..." : "Guardar"}
-                </Text>
-              </Button>
-            </Button.Group>
-          </Modal.Footer>
-        </Modal.Content>
+            <Modal.Footer style={COMMON_STYLES.modal.footer}>
+              <Button.Group>
+                <Button
+                  style={styles.modalButtonCancel}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <Text style={styles.modalButtonCancelText}>Cancelar</Text>
+                </Button>
+                <Button
+                  isDisabled={isLoading}
+                  style={styles.modalButtonSave}
+                  onPress={handleSubmit}
+                >
+                  <Text style={styles.modalButtonSaveText}>
+                    {isLoading ? "Guardando..." : "Guardar"}
+                  </Text>
+                </Button>
+              </Button.Group>
+            </Modal.Footer>
+          </Modal.Content>
+        </KeyboardAvoidingView>
       </Modal>
     </View>
   );

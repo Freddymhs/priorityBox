@@ -1,10 +1,16 @@
 import { Text, View, Box, useToast } from "native-base";
-import { FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { useContext, useCallback, useMemo } from "react";
 import { MyContext } from "../../../lib/Context";
 import { useItems, useLists, useConfirmation } from "../../../lib/hooks";
-import { COLORS, FONT_SIZES, SPACING } from "../../../lib/constants/theme";
+import {
+  COLORS,
+  COMPONENT_STYLES,
+  COMPONENT_PROPS,
+} from "../../../lib/constants/theme";
+
+const styles = COMPONENT_STYLES.ListOfLists;
 
 const ListItem = ({ item, onDelete }) => (
   <TouchableOpacity onPress={() => onDelete(item)} style={styles.listItem}>
@@ -14,19 +20,19 @@ const ListItem = ({ item, onDelete }) => (
 
 const ListHeader = ({ title, itemCount, onDeleteList }) => (
   <View style={styles.listItemHeader}>
-    <View style={{ flexDirection: "row", alignItems: "center" }}>
+    <View style={styles.listHeaderRow}>
       <FontAwesome
         name="cube"
         size={16}
         color={COLORS.primaryDark}
-        style={{ paddingRight: 5, paddingLeft: 3 }}
+        style={styles.listItemIcon}
       />
       <Text style={styles.listTitle} onPress={onDeleteList}>
         {title}
       </Text>
     </View>
     <Text style={styles.itemCount}>
-      {itemCount > 0 ? `${itemCount} items` : "sin elementos"}
+      {itemCount > 0 ? `${itemCount} elementos` : "sin elementos"}
     </Text>
   </View>
 );
@@ -52,7 +58,7 @@ const ListCard = ({ title, items, onDeleteList, onDeleteItem }) => (
 
 const EmptyState = () => (
   <Box flex={1} justifyContent="center" alignItems="center">
-    <Text fontSize="16" color="gray.400">
+    <Text fontSize={COMPONENT_PROPS.emptyStateText.fontSize} color={COMPONENT_PROPS.emptyStateText.color}>
       No hay listas disponibles
     </Text>
   </Box>
@@ -123,33 +129,7 @@ export const ListOfLists = () => {
         );
       }}
       keyExtractor={(item) => item}
+      contentContainerStyle={styles.listContentContainer}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  listItemContainer: {
-    paddingBottom: SPACING.sm,
-    paddingTop: SPACING.sm,
-  },
-  listItemHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  listTitle: {
-    fontSize: FONT_SIZES.subtitle,
-    fontWeight: "bold",
-    color: COLORS.primaryDark,
-  },
-  itemCount: {
-    color: COLORS.textMuted,
-  },
-  listItem: {
-    alignItems: "flex-start",
-    paddingLeft: 20,
-  },
-  listItemText: {
-    fontSize: FONT_SIZES.body,
-    color: COLORS.primaryDark,
-  },
-});

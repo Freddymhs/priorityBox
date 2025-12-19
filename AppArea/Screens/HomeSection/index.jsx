@@ -1,24 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { ModalAddItem } from "./ModalAddItem";
 import { Matriz } from "./Matriz";
-
-const styles = StyleSheet.create({
-  topSection: { flex: 1 },
-
-  bottomSection: {
-    backgroundColor: "#62EFFF",
-  },
-});
+import { COMPONENT_STYLES } from "../../../lib/constants/theme";
 
 export default function HomeSection() {
+  const styles = COMPONENT_STYLES.HomeSection;
+
   return (
     <>
       <View style={styles.topSection}>
         <Matriz />
       </View>
       <View style={styles.bottomSection}>
-        {/* aca falla */}
         <ModalAddItem />
       </View>
     </>

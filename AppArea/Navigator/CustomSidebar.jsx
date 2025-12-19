@@ -1,50 +1,28 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text, Image, StyleSheet } from "react-native";
+import { Text, Image, View } from "react-native";
 import {
   DrawerContentScrollView,
   DrawerItemList,
 } from "@react-navigation/drawer";
+import { COMPONENT_STYLES } from "../../lib/constants/theme";
+
+const styles = COMPONENT_STYLES.CustomSidebar;
 
 export const CustomSidebar = (props) => {
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Image
-        source={require("../../assets/icon.png")}
-        style={styles.sideMenuProfileIcon}
-      />
-      <DrawerContentScrollView {...props} style={{ flex: 1 }}>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.headerCard}>
+        <Image
+          source={require("../../assets/icon.png")}
+          style={styles.sideMenuProfileIcon}
+        />
+        <Text style={styles.appTitle}>PriorityBox</Text>
+        <Text style={styles.appSubtitle}>Enfoca lo que importa</Text>
+      </View>
+      <DrawerContentScrollView {...props} style={styles.drawerContent}>
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
-      <Text
-        style={{
-          fontSize: 13,
-          textAlign: "center",
-          color: "#215055",
-        }}
-      >
-        Gracias por probar esta App.
-      </Text>
+      <Text style={styles.footerText}>Gracias por probar esta App.</Text>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  sideMenuProfileIcon: {
-    resizeMode: "center",
-    width: 100,
-    height: 100,
-    borderRadius: 100 / 2,
-    alignSelf: "center",
-    flex: 1,
-  },
-  iconStyle: {
-    width: 15,
-    height: 15,
-    marginHorizontal: 5,
-  },
-  customItem: {
-    padding: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});

@@ -1,100 +1,77 @@
 import * as React from "react";
-import { TouchableOpacity, StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
 import Timeline from "react-native-timeline-flatlist";
-import { View, Center, Text } from "native-base";
+import { View, Text } from "native-base";
 import { SafeContainer } from "../../Components/SafeContainer";
+import { COLORS, COMPONENT_STYLES } from "../../../lib/constants/theme";
 
-const styles = StyleSheet.create({
-  safeContainer: {
-    backgroundColor: "#62EFFF",
-  },
-  container: {
-    flex: 12,
-  },
-  timeline: {
-    width: "81%",
-  },
-  space: {
-    flex: 1,
-  },
-  homeButton: {
-    flex: 1,
-    paddingTop: 67,
-  },
-  title: { color: "#215055", fontWeight: "bold", fontSize: 17 },
-  description: { color: "#215055" },
-});
+const styles = COMPONENT_STYLES.GuideSection;
 
 const data = [
   {
     time: "1",
-    title: <Text style={styles.title}>Crea tareas a completar</Text>,
+    title: <Text style={styles.title}>Captura</Text>,
     description: (
       <Text style={styles.description}>
-        Define qué quieres lograr y organiza tus tareas en una de las 4
-        categorías.
+        Anota ideas y deseos al instante. Libera tu mente.
       </Text>
     ),
   },
   {
     time: "2",
-    title: <Text style={styles.title}>Organiza tu matriz</Text>,
+    title: <Text style={styles.title}>Clasifica</Text>,
     description: (
       <Text style={styles.description}>
-        Prioriza las tareas importantes y urgentes.
+        ¿Necesidad o Deseo? Prioriza con honestidad.
       </Text>
     ),
   },
   {
     time: "3",
-    title: <Text style={styles.title}>Enfócate</Text>,
-
+    title: <Text style={styles.title}>Pausa</Text>,
     description: (
       <Text style={styles.description}>
-        Asegúrate de eliminar constantemente todo lo que no sea relevante.
+        Deja pasar el tiempo. ¿Es real o solo un impulso?
       </Text>
     ),
   },
   {
     time: "4",
-    title: <Text style={styles.title}>Revisa tu matriz</Text>,
+    title: <Text style={styles.title}>Revisa</Text>,
     description: (
       <Text style={styles.description}>
-        Elimina tareas que ya no consideres importantes o vuelve a agregarlas.
+        Si cambia tu prioridad, mueve o elimina sin culpa.
       </Text>
     ),
   },
   {
     time: "5",
-    title: <Text style={styles.title}>No te sobrecargues</Text>,
-
+    title: <Text style={styles.title}>Decide</Text>,
     description: (
-      <Text style={styles.description}> Disfruta de tu tiempo libre.</Text>
+      <Text style={styles.description}>
+        Actúa solo cuando estés seguro. Ahorra y gana paz.
+      </Text>
     ),
   },
 ];
 
-export default function GuideSection({ navigation }) {
+export default function GuideSection() {
   return (
     <SafeContainer style={styles.safeContainer}>
-      <View style={styles.space}></View>
       <View style={styles.container}>
         <Timeline
           style={styles.timeline}
+          listViewStyle={styles.timelineList}
+          contentContainerStyle={styles.timelineContent}
+          listViewContainerStyle={styles.timelineContent}
+          options={{
+            contentContainerStyle: styles.timelineContent,
+            showsVerticalScrollIndicator: false,
+          }}
           data={data}
-          lineColor="#215055"
-          circleColor="#215055"
+          lineColor={COLORS.textMuted}
+          circleColor={COLORS.primary}
         />
       </View>
-      <Center style={styles.homeButton}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={{ flex: 1 }}
-        >
-          <FontAwesome name="home" size={24} color="#215055" />
-        </TouchableOpacity>
-      </Center>
     </SafeContainer>
   );
 }

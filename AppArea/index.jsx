@@ -1,11 +1,13 @@
-import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native";
 import { Navigator } from "./Navigator";
 import { Provider } from "../lib/Context";
+import { COMPONENT_STYLES } from "../lib/constants/theme";
 
 const AppArea = () => {
   // const STATUSBAR_HEIGHT = StatusBar.currentHeight;
   // const APPBAR_HEIGHT = Platform.OS === "ios" ? 44 : 56;
+
+  const styles = COMPONENT_STYLES.AppArea;
 
   return (
     <Provider>
@@ -15,12 +17,5 @@ const AppArea = () => {
     </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: "#62EFFF",
-  },
-});
 
 export default AppArea;

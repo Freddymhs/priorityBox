@@ -1,5 +1,8 @@
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { COMPONENT_STYLES } from "../../lib/constants/theme";
+
+const styles = COMPONENT_STYLES.SafeContainer;
 
 export const SafeContainer = ({
   children,
@@ -22,9 +25,3 @@ export const SafeContainer = ({
     <View style={[styles.container, safeAreaStyle, style]}>{children}</View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});

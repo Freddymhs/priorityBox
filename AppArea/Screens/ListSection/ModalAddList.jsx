@@ -1,45 +1,21 @@
 import { Button, Input, Modal, Text, useToast } from "native-base";
 import { useContext, useState, useCallback } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { MyContext } from "../../../lib/Context";
 import { useLists } from "../../../lib/hooks";
 import {
   COLORS,
   COMMON_STYLES,
-  BORDER_RADIUS,
-  SPACING,
-  FONT_SIZES,
+  COMPONENT_STYLES,
+  INPUT_STATES,
 } from "../../../lib/constants/theme";
 
-const styles = StyleSheet.create({
-  header: COMMON_STYLES.modal.header,
-  body: COMMON_STYLES.modal.body,
-  footer: COMMON_STYLES.modal.footer,
-  button: {
-    ...COMMON_STYLES.button,
-    width: 233,
-    height: 55,
-    alignSelf: "center",
-    marginBottom: SPACING.md,
-  },
-  textButton: {
-    ...COMMON_STYLES.buttonText,
-  },
-  buttonGroup: {
-    ...COMMON_STYLES.button,
-    alignSelf: "center",
-  },
-  textButtonGroup: {
-    fontSize: FONT_SIZES.title,
-    color: COLORS.textLight,
-  },
-});
+const styles = COMPONENT_STYLES.ModalAddList;
 
 export const ModalAddList = ({ compactSize = false }) => {
   const toast = useToast();
   const { boxData = [], refetchBoxData } = useContext(MyContext);
-  const { CloseButton, Content, Body, Header, Footer } = Modal;
 
   // Hook SOLID
   const { createList, isLoading } = useLists(boxData, refetchBoxData);
@@ -76,35 +52,44 @@ export const ModalAddList = ({ compactSize = false }) => {
         isOpen={modalVisible}
         onClose={() => setModalVisible(false)}
       >
-        <Content maxWidth="720px">
-          <CloseButton />
-          <Header style={styles.header}>Crear Lista</Header>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "android" ? "padding" : "height"}
+          enabled
+          style={{ flex: 1, justifyContent: "center" }}
+        >
+          <Modal.Content maxWidth="720px">
+            <Modal.CloseButton />
+            <Modal.Header style={styles.header}>Crear Lista</Modal.Header>
 
-          <Body style={styles.body}>
-            <ModalBodyInputs
-              titleOfList={titleOfList}
-              descriptionOfList={descriptionOfList}
-              setTitleOfList={setTitleOfList}
-              setDescriptionOfList={setDescriptionOfList}
-            />
-          </Body>
-          <Footer style={styles.footer}>
-            <FooterButtons
-              setModalVisible={setModalVisible}
-              createNewList={handleCreateList}
-              isLoading={isLoading}
-            />
-          </Footer>
-        </Content>
+            <Modal.Body style={styles.body}>
+              <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+                <ModalBodyInputs
+                  titleOfList={titleOfList}
+                  descriptionOfList={descriptionOfList}
+                  setTitleOfList={setTitleOfList}
+                  setDescriptionOfList={setDescriptionOfList}
+                />
+              </ScrollView>
+            </Modal.Body>
+            <Modal.Footer style={styles.footer}>
+              <FooterButtons
+                setModalVisible={setModalVisible}
+                createNewList={handleCreateList}
+                isLoading={isLoading}
+              />
+            </Modal.Footer>
+          </Modal.Content>
+        </KeyboardAvoidingView>
       </Modal>
 
       {compactSize ? (
-        <FontAwesome
-          name="plus-square"
-          size={32}
-          color={COLORS.primaryDark}
+        <TouchableOpacity
           onPress={() => setModalVisible(true)}
-        />
+          style={styles.compactButton}
+          activeOpacity={0.85}
+        >
+          <FontAwesome name="plus" size={22} style={styles.compactIcon} />
+        </TouchableOpacity>
       ) : (
         <Button style={styles.button} onPress={() => setModalVisible(true)}>
           <Text style={styles.textButton}>Crear Lista</Text>
@@ -123,18 +108,14 @@ const FooterButtons = ({ setModalVisible, createNewList, isLoading }) => {
         variant="ghost"
         onPress={() => setModalVisible(false)}
       >
-        <Text style={styles.textButtonGroup}>
-          <FontAwesome name="close" size={21} color={COLORS.textLight} />
-          Cancelar
-        </Text>
+        <Text style={styles.textButtonGroup}>Cancelar</Text>
       </Button>
       <Button
         style={styles.buttonGroup}
         isDisabled={isLoading}
         onPress={createNewList}
       >
-        <Text style={styles.textButtonGroup}>
-          <FontAwesome name="check" size={21} color={COLORS.textLight} />
+        <Text style={styles.textButtonGroupSave}>
           {isLoading ? "Guardando..." : "Guardar"}
         </Text>
       </Button>
@@ -151,16 +132,20 @@ const ModalBodyInputs = ({
   return (
     <>
       <Input
-        borderColor={COLORS.primaryDark}
-        placeholderTextColor={COLORS.textSecondary}
+        variant="unstyled"
+        style={COMMON_STYLES.input}
+        _focus={INPUT_STATES.focusStyle}
+        placeholderTextColor={COLORS.textMuted}
         onChangeText={setTitleOfList}
         value={titleOfList}
         w="100%"
         placeholder="nombre"
       />
       <Input
-        borderColor={COLORS.primaryDark}
-        placeholderTextColor={COLORS.textSecondary}
+        variant="unstyled"
+        style={COMMON_STYLES.input}
+        _focus={INPUT_STATES.focusStyle}
+        placeholderTextColor={COLORS.textMuted}
         w="100%"
         h="20"
         onChangeText={setDescriptionOfList}

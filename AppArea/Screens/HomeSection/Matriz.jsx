@@ -1,93 +1,15 @@
-import { SectionList, useToast } from "native-base";
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { useToast } from "native-base";
+import { Text, TouchableOpacity, View, ScrollView } from "react-native";
 import { useContext, useMemo, useCallback } from "react";
 import { SafeContainer } from "../../Components/SafeContainer";
+import { NeuView } from "../../Components/NeuView";
 import { MyContext } from "../../../lib/Context";
 import { useItems, useConfirmation } from "../../../lib/hooks";
 import { categorizeItemsByQuadrant } from "../../../lib/utils/matrixUtils";
-import { MATRIX_COLUMNS, VERTICAL_LABELS } from "../../../lib/constants/matrix";
-import {
-  COLORS,
-  FONT_SIZES,
-  BORDER_RADIUS,
-} from "../../../lib/constants/theme";
+import { MATRIX_COLUMNS } from "../../../lib/constants/matrix";
+import { COMPONENT_STYLES } from "../../../lib/constants/theme";
 
-const screenWidth = Dimensions.get("window").width;
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    backgroundColor: COLORS.background,
-  },
-  column: {
-    flex: 1,
-    flexDirection: "column",
-  },
-  columnHeader: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: BORDER_RADIUS.medium,
-  },
-  columnHeaderText: {
-    fontWeight: "800",
-    color: COLORS.primaryDark,
-  },
-  quadrantContainer: {
-    flex: 1,
-    justifyContent: "center",
-    width: screenWidth / 2,
-    flexDirection: "row",
-  },
-  quadrantContainerRight: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    width: screenWidth / 2,
-  },
-  verticalLabelContainer: {
-    alignItems: "center",
-    alignSelf: "center",
-  },
-  verticalLabelText: {
-    fontSize: 13,
-    fontWeight: "900",
-    color: COLORS.primaryDark,
-  },
-  itemContainer: {
-    margin: 2,
-    borderRadius: BORDER_RADIUS.large,
-    padding: 7,
-    backgroundColor: COLORS.matrix.item,
-  },
-  itemText: {
-    fontSize: FONT_SIZES.body,
-    fontWeight: "bold",
-    textAlign: "center",
-    minWidth: screenWidth / 3,
-    color: COLORS.matrix.itemText,
-  },
-  sectionHeader: {},
-});
-
-/**
- * VerticalLabel - Etiqueta vertical para los cuadrantes
- * SOLID: SRP - Solo renderiza etiquetas verticales
- */
-const VerticalLabel = ({ letters }) => (
-  <View style={styles.verticalLabelContainer}>
-    {letters.map((letter, index) => (
-      <Text key={index} style={styles.verticalLabelText}>
-        {letter}
-      </Text>
-    ))}
-  </View>
-);
+const styles = COMPONENT_STYLES.Matriz;
 
 /**
  * QuadrantItem - Item individual de un cuadrante
@@ -103,52 +25,51 @@ const QuadrantItem = ({ item, onDelete }) => (
  * QuadrantList - Lista de items de un cuadrante
  * SOLID: SRP - Solo renderiza la lista de un cuadrante
  */
-const QuadrantList = ({ items, onDeleteItem }) => (
-  <SectionList
-    sections={[{ data: items }]}
-    renderItem={({ item }) => (
-      <QuadrantItem item={item} onDelete={onDeleteItem} />
-    )}
-    renderSectionHeader={({ section }) => (
-      <Text style={styles.sectionHeader}>{section.title}</Text>
-    )}
-    keyExtractor={(item, index) => `${item.name}-${index}`}
-    showsVerticalScrollIndicator={false}
-  />
+const QuadrantList = ({ items, onDeleteItem, category, subLabel }) => (
+  <NeuView style={styles.quadrantWrapper} inset={true}>
+    <View style={styles.quadrantCard}>
+      <View style={styles.quadrantTitleContainer}>
+        <Text style={styles.quadrantCategory}>{category}</Text>
+        <Text style={styles.quadrantSubLabel}>{subLabel}</Text>
+      </View>
+      {items && items.length > 0 ? (
+        <ScrollView
+          style={styles.scrollViewFlex}
+          contentContainerStyle={[styles.itemsStack, styles.itemsScroll]}
+          showsVerticalScrollIndicator={false}
+        >
+          {/* s */}
+          {items.map((item, index) => (
+            <QuadrantItem
+              key={`${item.name}-${index}`}
+              item={item}
+              onDelete={onDeleteItem}
+            />
+          ))}
+        </ScrollView>
+      ) : (
+        <View style={[styles.itemsStack, styles.itemsStackEmpty]}>
+          <Text style={styles.emptyText}>Sin elementos</Text>
+        </View>
+      )}
+    </View>
+  </NeuView>
 );
 
 /**
  * MatrixColumn - Columna de la matriz (NECESIDADES o DESEOS)
  * SOLID: SRP - Solo renderiza una columna
  */
-const MatrixColumn = ({
-  title,
-  quadrants,
-  onDeleteItem,
-  showLabels = true,
-}) => (
+const MatrixColumn = ({ quadrants, onDeleteItem }) => (
   <View style={styles.column}>
-    <View style={styles.columnHeader}>
-      <Text style={styles.columnHeaderText}>{title}</Text>
-    </View>
-
     {quadrants.map((quadrant, index) => (
-      <View
-        key={quadrant.id}
-        style={
-          showLabels ? styles.quadrantContainer : styles.quadrantContainerRight
-        }
-      >
-        {showLabels && (
-          <VerticalLabel
-            letters={
-              quadrant.label === "RELEVANTE"
-                ? VERTICAL_LABELS.RELEVANTE
-                : VERTICAL_LABELS.IRRELEVANTE
-            }
-          />
-        )}
-        <QuadrantList items={quadrant.items} onDeleteItem={onDeleteItem} />
+      <View key={quadrant.id} style={styles.quadrantRow}>
+        <QuadrantList
+          items={quadrant.items}
+          onDeleteItem={onDeleteItem}
+          category={quadrant.categoryName}
+          subLabel={quadrant.subLabelText}
+        />
       </View>
     ))}
   </View>
@@ -177,6 +98,9 @@ export const Matriz = () => {
         title: MATRIX_COLUMNS.LEFT.title,
         quadrants: MATRIX_COLUMNS.LEFT.quadrants.map((q) => ({
           ...q,
+          categoryName: MATRIX_COLUMNS.LEFT.title, // "NECESIDADES"
+          subLabelText:
+            q.label === "RELEVANTE" ? "Importantes" : "Menos importantes",
           items: categorizedItems[q.id] || [],
         })),
       },
@@ -184,6 +108,9 @@ export const Matriz = () => {
         title: MATRIX_COLUMNS.RIGHT.title,
         quadrants: MATRIX_COLUMNS.RIGHT.quadrants.map((q) => ({
           ...q,
+          categoryName: MATRIX_COLUMNS.RIGHT.title, // "DESEOS"
+          subLabelText:
+            q.label === "RELEVANTE" ? "Importantes" : "Menos importantes",
           items: categorizedItems[q.id] || [],
         })),
       },
@@ -202,6 +129,13 @@ export const Matriz = () => {
           toast.show({
             description: "TAREA ELIMINADA",
             placement: "top",
+            render: () => {
+              return (
+                <View style={styles.toastContainer}>
+                  <Text style={styles.toastText}>TAREA ELIMINADA</Text>
+                </View>
+              );
+            },
           });
         }
       });
@@ -212,16 +146,12 @@ export const Matriz = () => {
   return (
     <SafeContainer style={styles.container}>
       <MatrixColumn
-        title={columnsData.left.title}
         quadrants={columnsData.left.quadrants}
         onDeleteItem={handleDeleteItem}
-        showLabels={true}
       />
       <MatrixColumn
-        title={columnsData.right.title}
         quadrants={columnsData.right.quadrants}
         onDeleteItem={handleDeleteItem}
-        showLabels={false}
       />
     </SafeContainer>
   );

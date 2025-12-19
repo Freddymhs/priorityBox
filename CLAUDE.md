@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 PriorityBox is a React Native task management app built with Expo that implements the Eisenhower Matrix for task prioritization. The app uses Firebase Realtime Database for data persistence and follows SOLID principles.
 
 **Tech Stack:**
+
 - React Native 0.74.5
 - Expo 51.0.39
 - Firebase Realtime Database
@@ -35,6 +36,7 @@ npm run web
 ### WayDroid Development (Linux)
 
 The `npm run android` command uses a custom script (`run-android-waydroid.sh`) that:
+
 1. Cleans up Metro zombie processes
 2. Forces Metro to listen on IPv4 (WayDroid requirement)
 3. Restarts Expo Go for clean hot reload
@@ -56,20 +58,24 @@ npm run firebase:init
 The codebase follows SOLID principles with clear separation of concerns:
 
 **Services Layer** (`lib/services/`)
+
 - `DatabaseService.js` - Abstract interface for Firebase operations (DIP)
 - `ListService.js` - List CRUD operations
 - `ItemService.js` - Item CRUD operations
 
 **Hooks Layer** (`lib/hooks/`)
+
 - `useLists.js` - List management logic
 - `useItems.js` - Item management logic
 - `useConfirmation.js` - Confirmation dialogs
 
 **Constants** (`lib/constants/`)
+
 - `theme.js` - Colors, fonts, common styles
 - `matrix.js` - Eisenhower Matrix configuration (quadrants, labels, select options)
 
 **Utils** (`lib/utils/`)
+
 - `matrixUtils.js` - Pure functions for categorizing items by quadrant
 
 ### Data Flow
@@ -91,6 +97,7 @@ Firebase Realtime Database
 ```
 
 **Key Context Values:**
+
 - `boxData` - All lists and items from Firebase
 - `refetchBoxData()` - Refetch data after mutations
 - `isLoading` - Loading state
@@ -153,9 +160,7 @@ Use the `SafeContainer` component for all screens to handle notches and status b
 import { SafeContainer } from "../../Components/SafeContainer";
 
 export const MyScreen = () => (
-  <SafeContainer style={styles.container}>
-    {/* content */}
-  </SafeContainer>
+  <SafeContainer style={styles.container}>{/* content */}</SafeContainer>
 );
 ```
 
@@ -188,6 +193,12 @@ import { QUADRANTS } from "../../../lib/constants/matrix";
 import { COLORS, QUADRANTS } from "../../../lib/constants";
 ```
 
+## Code Standards
+
+### No Comments in Code
+
+Do NOT add comments to the code unless explicitly requested by the user. Code should be self-documenting through clear naming and structure. Only add comments when the user specifically asks for them.
+
 ## Known Issues & Workarounds
 
 ### Yarn Berry (PnP) Incompatibility with Expo
@@ -201,6 +212,7 @@ Metro uses port **8080** (not the default 8081) for WayDroid compatibility. This
 ### Hot Reload Requirements
 
 For hot reload to work consistently:
+
 1. Metro must start with `--clear` flag (cache clearing)
 2. Expo Go must be force-stopped and restarted
 3. Both steps are automated in `run-android-waydroid.sh`
