@@ -16,9 +16,29 @@
         "resourceClass": "m1-medium"
       }
     },
+    "apk": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "production": {
       "ios": {
         "resourceClass": "m1-medium"
+      },
+      "android": {
+        "env": {
+          "node": "20.19.4"
+        }
+      },
+      "env": {
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyCpSkqfV50SjlthQDa4xY3ludNjIi7E7jE",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "prioribox-e6d9d.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "prioribox-e6d9d",
+        "EXPO_PUBLIC_FIREBASE_DATABASE_URL": "https://prioribox-e6d9d-default-rtdb.firebaseio.com",
+        "EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET": "prioribox-e6d9d.appspot.com",
+        "EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID": "638157444296",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:638157444296:web:3bf139f3a2457b244f41fd"
       }
     }
   },

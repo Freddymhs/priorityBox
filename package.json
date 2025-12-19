@@ -7,7 +7,9 @@
     "android": "./run-android-waydroid.sh",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "firebase:init": "node scripts/init-firebase-data.js"
+    "firebase:init": "node scripts/init-firebase-data.js",
+    "build:android:store": "env $(grep -v '^#' .env.local | xargs) eas build --platform android --local --output build-latest.aab | tee last-build.txt",
+    "install:aab:to:apk:android": "./scripts/install-aab-to-device.sh"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
@@ -35,7 +37,7 @@
     "react-native-reanimated": "~3.10.1",
     "react-native-safe-area-context": "4.10.5",
     "react-native-screens": "3.31.1",
-    "react-native-svg": "^15.15.1",
+    "react-native-svg": "15.2.0",
     "react-native-tab-view": "^3.3.4",
     "react-native-timeline-flatlist": "^0.8.0",
     "react-native-web": "~0.19.10",
