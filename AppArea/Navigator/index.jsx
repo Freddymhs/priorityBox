@@ -1,16 +1,20 @@
 import * as React from "react";
-import { CustomSidebar } from "./CustomSidebar";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import HomeSection from "../Screens/HomeSection";
 import GuideSection from "../Screens/GuideSection";
 import ListSection from "../Screens/ListSection";
-import { COLORS, BORDER_RADIUS } from "../../lib/constants/theme";
+import {
+  COLORS,
+  BORDER_RADIUS,
+  SPACING,
+  FONT_SIZES,
+} from "../../lib/constants/theme";
+
+const Tab = createBottomTabNavigator();
 
 export const Navigator = () => {
-  const Drawer = createDrawerNavigator();
-
   const navTheme = {
     ...DefaultTheme,
     colors: {
@@ -25,60 +29,70 @@ export const Navigator = () => {
 
   return (
     <NavigationContainer theme={navTheme}>
-      <Drawer.Navigator
-        drawerContent={(navigatorProps) => (
-          <CustomSidebar {...navigatorProps} />
-        )}
+      <Tab.Navigator
         initialRouteName="MATRIZ"
         screenOptions={{
-          drawerType: "front",
-          drawerStyle: {
-            backgroundColor: COLORS.background,
-            width: "89%",
-            borderTopRightRadius: BORDER_RADIUS.xl,
-            borderBottomRightRadius: BORDER_RADIUS.xl,
-          },
-          drawerActiveTintColor: COLORS.primaryDark,
-          drawerActiveBackgroundColor: COLORS.card,
-          drawerInactiveTintColor: COLORS.textSecondary,
           headerShown: false,
+          tabBarActiveTintColor: COLORS.textLight,
+          tabBarInactiveTintColor: COLORS.textSecondary,
+          tabBarActiveBackgroundColor: COLORS.primary,
+          tabBarItemStyle: {
+            borderRadius: BORDER_RADIUS.medium,
+            marginHorizontal: SPACING.xs,
+            marginVertical: SPACING.sm,
+          },
+          tabBarStyle: {
+            backgroundColor: COLORS.card,
+            borderTopWidth: 0,
+            paddingTop: SPACING.xs,
+            paddingBottom: SPACING.sm,
+            paddingHorizontal: SPACING.md,
+            height: 70,
+            borderTopLeftRadius: BORDER_RADIUS.xxl,
+            borderTopRightRadius: BORDER_RADIUS.xxl,
+            position: "absolute",
+            elevation: 8,
+            shadowColor: COLORS.neuDark,
+            shadowOffset: { width: 0, height: -4 },
+            shadowOpacity: 0.15,
+            shadowRadius: 8,
+          },
+          tabBarLabelStyle: {
+            fontSize: FONT_SIZES.small,
+            fontWeight: "600",
+            marginTop: 2,
+          },
         }}
       >
-        <Drawer.Screen
-          name="GUÍA"
-          component={GuideSection}
-          options={{
-            headerShown: false,
-            drawerIcon: () => (
-              <FontAwesome name="file" size={32} color={COLORS.drawerIcon} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="MATRIZ"
-          component={HomeSection}
-          options={{
-            headerShown: false,
-            drawerIcon: () => (
-              <FontAwesome
-                name="list-alt"
-                size={32}
-                color={COLORS.drawerIcon}
-              />
-            ),
-          }}
-        />
-        <Drawer.Screen
+        <Tab.Screen
           name="LISTAS"
           component={ListSection}
           options={{
-            headerShown: false,
-            drawerIcon: () => (
-              <FontAwesome name="th-list" size={32} color={COLORS.drawerIcon} />
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="th-list" size={size} color={color} />
             ),
           }}
         />
-      </Drawer.Navigator>
+        <Tab.Screen
+          name="MATRIZ"
+          component={HomeSection}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="list-alt" size={size} color={color} />
+            ),
+          }}
+        />
+
+        <Tab.Screen
+          name="GUÍA"
+          component={GuideSection}
+          options={{
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="file" size={size} color={color} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };
