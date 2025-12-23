@@ -31,7 +31,7 @@ const Provider = ({ children }) => {
 
   return (
     <MyContext.Provider
-      value={{ boxData, setBoxData, refetchBoxData, isLoading }}
+      value={{ boxData, refetchBoxData, isLoading }}
     >
       {children}
     </MyContext.Provider>
