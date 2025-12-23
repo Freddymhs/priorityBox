@@ -9,7 +9,9 @@
     "web": "expo start --web",
     "firebase:init": "node scripts/init-firebase-data.js",
     "build:android:store": "env $(grep -v '^#' .env.local | xargs) eas build --platform android --local --output build-latest.aab | tee last-build.txt",
-    "install:aab:to:apk:android": "./scripts/install-aab-to-device.sh"
+    "install:aab:to:apk:android": "./scripts/install-aab-to-device.sh",
+    "build:ios": "npx expo prebuild --platform ios && cd ios && pod install && xcodebuild -workspace prioritybox.xcworkspace -scheme prioritybox -destination 'platform=iOS,name=iPhone' -configuration Debug build",
+    "install:ios": "cd ios && xcodebuild -workspace prioritybox.xcworkspace -scheme prioritybox -destination 'platform=iOS,name=iPhone' -configuration Debug build install"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
