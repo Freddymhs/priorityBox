@@ -39,3 +39,16 @@ WAYDROID-SETUP.md
 
 # MCP metadata (optional)
 .serena/
+
+# iOS generated files
+ios/
+ios/build/
+ios/Pods/
+ios/*.xcworkspace/
+Podfile.lock
+*.xcuserstate
+
+# Temporary scripts
+scripts/temp-*
+scripts/*-temp*
+scripts/auto-*

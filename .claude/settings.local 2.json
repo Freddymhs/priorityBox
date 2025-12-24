@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(npm run build:ios:*)",
+      "Bash(gem install:*)",
+      "Bash(sudo xcode-select:*)",
+      "Bash(xcode-select:*)",
+      "Bash(ls:*)",
+      "Bash(xcrun devicectl list:*)",
+      "Bash(npm run install:ios:*)",
+      "Bash(system_profiler:*)",
+      "Bash(xcrun simctl list:*)",
+      "Bash(xcrun xctrace:*)",
+      "Bash(xcodebuild:*)",
+      "Bash(find:*)",
+      "Bash(pod install:*)"
+    ],
+    "deny": []
+  }
+}

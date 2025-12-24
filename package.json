@@ -5,13 +5,14 @@
   "scripts": {
     "start": "expo start",
     "android": "./run-android-waydroid.sh",
-    "ios": "expo start --ios",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "firebase:init": "node scripts/init-firebase-data.js",
     "build:android:store": "env $(grep -v '^#' .env.local | xargs) eas build --platform android --local --output build-latest.aab | tee last-build.txt",
     "install:aab:to:apk:android": "./scripts/install-aab-to-device.sh",
-    "build:ios": "npx expo prebuild --platform ios && cd ios && pod install && xcodebuild -workspace prioritybox.xcworkspace -scheme prioritybox -destination 'platform=iOS,name=iPhone' -configuration Debug build",
-    "install:ios": "cd ios && xcodebuild -workspace prioritybox.xcworkspace -scheme prioritybox -destination 'platform=iOS,name=iPhone' -configuration Debug build install"
+    "build:ios": "npx expo prebuild --platform ios && cd ios && pod install && xcodebuild -project priorityBox.xcodeproj -scheme priorityBox -destination 'generic/platform=iOS' build",
+    "install:ios:device": "./scripts/install-ios-device.sh",
+    "build:install:ios:device": "npm run build:ios && npm run install:ios:device"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
@@ -50,6 +51,7 @@
   },
   "private": true,
   "volta": {
-    "node": "20.19.6"
+    "node": "20.19.6",
+    "yarn": "4.12.0"
   }
 }
