@@ -7,7 +7,7 @@ import { MyContext } from "../../../lib/Context";
 import { useItems, useConfirmation } from "../../../lib/hooks";
 import { categorizeItemsByQuadrant } from "../../../lib/utils/matrixUtils";
 import { MATRIX_COLUMNS } from "../../../lib/constants/matrix";
-import { COMPONENT_STYLES } from "../../../lib/constants/theme";
+import { COMPONENT_STYLES, COLORS } from "../../../lib/constants/theme";
 
 const styles = COMPONENT_STYLES.Matriz;
 
@@ -127,15 +127,10 @@ export const Matriz = () => {
         const result = await deleteItemFromAll(item);
         if (result.success) {
           toast.show({
-            description: "TAREA ELIMINADA",
+            title: "Elemento eliminado",
             placement: "top",
-            render: () => {
-              return (
-                <View style={styles.toastContainer}>
-                  <Text style={styles.toastText}>TAREA ELIMINADA</Text>
-                </View>
-              );
-            },
+            bg: COLORS.primaryDark,
+            duration: 2000,
           });
         }
       });
