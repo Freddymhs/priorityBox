@@ -5,36 +5,27 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "icon": "./assets/icon.png",
       "bundleIdentifier": "com.fmarcosdev.priorityBox"
     },
     "android": {
-      "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#ffffff"
       },
-      "package": "com.fmarcosdev.priorityBox",
-      "softwareKeyboardLayoutMode": "resize"
+      "edgeToEdgeEnabled": true,
+      "package": "com.fmarcosdev.priorityBox"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "a20308ed-e89e-4ce8-923d-54c2d06e5354"
-      }
     }
   }
 }

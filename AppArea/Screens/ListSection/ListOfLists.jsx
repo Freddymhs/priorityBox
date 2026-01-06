@@ -66,7 +66,8 @@ const EmptyState = () => (
 
 export const ListOfLists = () => {
   const toast = useToast();
-  const { boxData, refetchBoxData } = useContext(MyContext);
+  const contextValue = useContext(MyContext);
+  const { boxData, refetchBoxData } = contextValue || {};
 
   // Hooks SOLID
   const { deleteItemFromList } = useItems(boxData, refetchBoxData);

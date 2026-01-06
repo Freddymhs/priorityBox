@@ -80,7 +80,8 @@ const MatrixColumn = ({ quadrants, onDeleteItem }) => (
  */
 export const Matriz = () => {
   const toast = useToast();
-  const { boxData, refetchBoxData } = useContext(MyContext);
+  const contextValue = useContext(MyContext);
+  const { boxData, refetchBoxData } = contextValue || {};
 
   // Hooks SOLID
   const { deleteItemFromAll } = useItems(boxData, refetchBoxData);

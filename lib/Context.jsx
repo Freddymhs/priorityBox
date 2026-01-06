@@ -30,9 +30,7 @@ const Provider = ({ children }) => {
   }, [fetchData]);
 
   return (
-    <MyContext.Provider
-      value={{ boxData, refetchBoxData, isLoading }}
-    >
+    <MyContext.Provider value={{ boxData, refetchBoxData, isLoading }}>
       {children}
     </MyContext.Provider>
   );

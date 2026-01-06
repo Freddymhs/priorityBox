@@ -26,7 +26,8 @@ const styles = COMPONENT_STYLES.ModalAddItem;
 export const ModalAddItem = () => {
   const toast = useToast();
   const [modalVisible, setModalVisible] = useState(false);
-  const { boxData, refetchBoxData } = useContext(MyContext);
+  const contextValue = useContext(MyContext);
+  const { boxData, refetchBoxData } = contextValue || {};
 
   // Hooks SOLID
   const { addItem, createItem, isLoading } = useItems(boxData, refetchBoxData);

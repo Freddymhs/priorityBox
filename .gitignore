@@ -39,3 +39,17 @@ WAYDROID-SETUP.md
 
 # MCP metadata (optional)
 .serena/
+
+# Native generated files (regenerate with: npx expo prebuild)
+android/
+ios/
+ios/build/
+ios/Pods/
+ios/*.xcworkspace/
+Podfile.lock
+*.xcuserstate
+
+# Temporary scripts
+scripts/temp-*
+scripts/*-temp*
+scripts/auto-*

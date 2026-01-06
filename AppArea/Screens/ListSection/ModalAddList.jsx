@@ -15,7 +15,8 @@ const styles = COMPONENT_STYLES.ModalAddList;
 
 export const ModalAddList = ({ compactSize = false }) => {
   const toast = useToast();
-  const { boxData = [], refetchBoxData } = useContext(MyContext);
+  const contextValue = useContext(MyContext);
+  const { boxData = [], refetchBoxData } = contextValue || {};
 
   // Hook SOLID
   const { createList, isLoading } = useLists(boxData, refetchBoxData);
