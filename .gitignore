@@ -28,10 +28,9 @@ web-build/
 # Firebase credentials (SECURITY)
 google-services.json
 
-# Yarn Berry cache
-.yarn/cache
-.yarn/install-state.gz
-.yarn/unplugged
+# Yarn (migrated to npm)
+.yarn/
+.yarnrc.yml
 
 # Temporary files
 agregar-listas-ejemplo.json

@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start",
+    "preconfig": "",
+    "firebase:init": "node scripts/init-firebase-data.js",
     "android": "expo run:android",
+    "-": "",
     "ios": "expo run:ios",
     "ios:device": "expo run:ios --device",
-    "ios:device:release": "expo run:ios --device --configuration Release",
-    "web": "expo start --web",
-    "firebase:init": "node scripts/init-firebase-data.js"
+    "ios:device:release": "expo run:ios --device --configuration Release"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
