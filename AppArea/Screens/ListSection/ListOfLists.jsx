@@ -45,13 +45,11 @@ const ListCard = ({ title, items, onDeleteList, onDeleteItem }) => (
       onDeleteList={onDeleteList}
     />
     {items && items.length > 0 && (
-      <FlatList
-        data={items}
-        renderItem={({ item }) => (
-          <ListItem item={item} onDelete={onDeleteItem} />
-        )}
-        keyExtractor={(_, index) => index.toString()}
-      />
+      <View>
+        {items.map((item, index) => (
+          <ListItem key={index} item={item} onDelete={onDeleteItem} />
+        ))}
+      </View>
     )}
   </View>
 );

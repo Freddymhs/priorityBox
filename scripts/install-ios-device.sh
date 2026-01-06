@@ -42,16 +42,14 @@ echo "   Versión de iOS: $IOS_VERSION"
 
 cd ios
 
-echo "🔐 Configurando firma automática..."
+echo "🔐 Verificando configuración de firma..."
 
 # Verificar identidad de desarrollo disponible
 DEV_IDENTITY=$(security find-identity -v -p codesigning | grep "Apple Development" | head -1)
-TEAM_ID=$(security find-identity -v -p codesigning | grep "Apple Development" | grep -o "([0-9A-Z]*)" | tr -d "()" | head -1)
 
-if [ -n "$DEV_IDENTITY" ] && [ -n "$TEAM_ID" ]; then
+if [ -n "$DEV_IDENTITY" ]; then
     echo "   ✅ Identidad de desarrollo encontrada"
     echo "   $DEV_IDENTITY"
-    echo "   Team ID: $TEAM_ID"
 else
     echo "   ❌ No se encontró identidad de desarrollo"
     echo "   Abre Xcode > Preferences > Accounts y agrega tu Apple ID"
@@ -59,6 +57,7 @@ else
 fi
 
 # Construir e instalar usando xcodebuild (usar workspace, no proyecto)
+# El Team ID se toma del proyecto, configurado en Xcode
 echo "🚀 Instalando app en dispositivo..."
 xcodebuild \
     -workspace priorityBox.xcworkspace \
@@ -67,7 +66,7 @@ xcodebuild \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     CODE_SIGN_STYLE=Automatic \
-    DEVELOPMENT_TEAM="$TEAM_ID" \
+    ENABLE_USER_SCRIPT_SANDBOXING=NO \
     install
 
 echo ""

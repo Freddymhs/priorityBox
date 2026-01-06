@@ -3,12 +3,21 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "---optional": ":",
+    "clean": "./scripts/deep-clean.sh",
+    "firebase:init": "node scripts/init-firebase-data.js",
+    "ios:emulator": "expo run:ios",
+    "---dev": ":",
+    "start": "npx kill-port 8080 8081 && npx expo",
+    "metro": "./scripts/start-metro-device.sh",
     "android": "expo run:android",
-    "ios": "expo run:ios",
-    "ios:device": "expo run:ios --device",
+    "setup:ios": "./scripts/setup-ios.sh",
+    "ios:device": "./scripts/build-install-ios.sh",
+    "ios:device:debug": "./scripts/install-ios-device-debug.sh",
+    "ios:logs": "./scripts/view-device-logs.sh",
+    "---build": ":",
     "ios:device:release": "expo run:ios --device --configuration Release",
-    "clean": "rm -rf android ios .expo",
-    "firebase:init": "node scripts/init-firebase-data.js"
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -24,12 +33,13 @@
     "firebase": "^12.7.0",
     "native-base": "^3.4.28",
     "react": "19.1.0",
-    "react-dom": "^19.2.3",
+    "react-dom": "19.1.0",
     "react-native": "0.81.5",
     "react-native-gesture-handler": "~2.28.0",
+    "react-native-pager-view": "6.9.1",
     "react-native-safe-area-context": "~5.6.0",
-    "react-native-screens": "^4.19.0",
-    "react-native-svg": "^15.15.1",
+    "react-native-screens": "^4.16.0",
+    "react-native-svg": "15.12.1",
     "react-native-tab-view": "^4.2.2",
     "react-native-timeline-flatlist": "^0.8.0",
     "react-native-web": "^0.21.2",
@@ -37,6 +47,7 @@
   },
   "private": true,
   "volta": {
-    "node": "20.19.6"
+    "node": "20.19.6",
+    "yarn": "4.12.0"
   }
 }

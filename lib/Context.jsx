@@ -5,7 +5,7 @@ import ListService from "./services/ListService";
 const MyContext = createContext(null);
 
 // Creamos el proveedor del contexto
-const Provider = ({ children }) => {
+const DataProvider = ({ children }) => {
   const [boxData, setBoxData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -36,4 +36,4 @@ const Provider = ({ children }) => {
   );
 };
 
-export { MyContext, Provider };
+export { MyContext, DataProvider };

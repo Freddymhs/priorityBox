@@ -1,15 +1,20 @@
 import React from "react";
-
-import { NavigationContainer } from "@react-navigation/native";
+import { LogBox } from "react-native";
 import { NativeBaseProvider } from "native-base";
 import AppArea from "./AppArea";
-console.disableYellowBox = true;
+import { nativeBaseTheme } from "./lib/nativebase-theme";
+
+// Ignorar warnings específicos de NativeBase deprecado
+LogBox.ignoreLogs([
+  "In React 18, SSRProvider is not necessary",
+  "SafeAreaView has been deprecated",
+  "is not a valid color or brush",
+  "VirtualizedLists should never be nested",
+]);
 
 export default function App() {
   return (
-    // native base , container and provider
-    <NativeBaseProvider>
-      {/* main content of this app */}
+    <NativeBaseProvider theme={nativeBaseTheme}>
       <AppArea />
     </NativeBaseProvider>
   );

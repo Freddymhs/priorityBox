@@ -85,14 +85,12 @@ export const ModalAddItem = () => {
       </Button>
 
       <Modal
-        animationType="slide"
-        transparent={true}
         isOpen={modalVisible}
         onClose={() => setModalVisible(false)}
       >
         <KeyboardAvoidingView
           behavior={Platform.OS === "android" ? "padding" : "height"}
-          enabled
+          enabled={true}
           style={{ flex: 1, justifyContent: "center" }}
         >
           <Modal.Content maxWidth={MODAL_PROPS.maxWidth} bg={MODAL_PROPS.contentBg}>
