@@ -1,7 +1,13 @@
 import { Button, Input, Modal, Text, useToast } from "native-base";
 import { useContext, useState, useCallback } from "react";
 import { FontAwesome } from "@expo/vector-icons";
-import { Alert, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import {
+  Alert,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from "react-native";
 import { MyContext } from "../../../lib/Context";
 import { useLists } from "../../../lib/hooks";
 import {
@@ -47,10 +53,7 @@ export const ModalAddList = ({ compactSize = false }) => {
 
   return (
     <>
-      <Modal
-        isOpen={modalVisible}
-        onClose={() => setModalVisible(false)}
-      >
+      <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "android" ? "padding" : "height"}
           enabled={true}
@@ -61,7 +64,10 @@ export const ModalAddList = ({ compactSize = false }) => {
             <Modal.Header style={styles.header}>Crear Lista</Modal.Header>
 
             <Modal.Body style={styles.body}>
-              <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
+              <ScrollView
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+              >
                 <ModalBodyInputs
                   titleOfList={titleOfList}
                   descriptionOfList={descriptionOfList}
