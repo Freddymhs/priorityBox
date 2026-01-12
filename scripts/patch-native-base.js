@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Patch native-base 3.4.28 for React Native 0.81.5+ BackHandler API compatibility
- * This fixes: TypeError: _reactNative.BackHandler.removeEventListener is not a function
+ * Fixes: _reactNative.BackHandler.removeEventListener is not a function
+ * Solution: Use subscription.remove() instead of BackHandler.removeEventListener()
  */
 
 const fs = require('fs');
@@ -17,54 +18,58 @@ filesToPatch.forEach((file) => {
   const filePath = path.join(__dirname, '..', file);
 
   if (!fs.existsSync(filePath)) {
+    console.log(`⊘ File not found: ${file}`);
     return;
   }
 
   let content = fs.readFileSync(filePath, 'utf8');
   let modified = false;
 
-  // If file doesn't have removeEventListener, skip it
-  if (!content.includes('removeEventListener')) {
-    return;
+  // Check if already properly patched
+  if (content.includes('subscription = BackHandler.addEventListener') ||
+      content.includes('subscription = _reactNative.BackHandler.addEventListener')) {
+    return; // Already patched
   }
 
-  // Replace all instances of BackHandler.removeEventListener with subscription.remove()
-  // First, replace the simple case: BackHandler.removeEventListener(...)
-  const simpleRemovePattern = /BackHandler\.removeEventListener\(['"]hardwareBackPress['"],\s*(\w+)\)/g;
-  if (simpleRemovePattern.test(content)) {
-    content = content.replace(simpleRemovePattern, (match, callbackName) => {
-      return `subscription?.remove()`;
-    });
+  // STEP 1: Ensure subscription variable exists in useBackHandler
+  if (!content.includes('let subscription = null;')) {
+    // Find useBackHandler function and add subscription variable after useEffect opening
+    content = content.replace(
+      /export function useBackHandler\(\{[\s\S]*?\}\) \{\s*useEffect\(\(\) => \{/,
+      (match) => match + '\n    let subscription = null;'
+    );
+    content = content.replace(
+      /function useBackHandler\(\{[\s\S]*?\}\) \{\s*\(0, _react\.useEffect\)\(\(\) => \{/,
+      (match) => match + '\n    let subscription = null;'
+    );
     modified = true;
   }
 
-  // Pattern for _reactNative.BackHandler.removeEventListener (commonjs)
-  const commonjsRemovePattern = /_reactNative\.BackHandler\.removeEventListener\(['"]hardwareBackPress['"],\s*(\w+)\)/g;
-  if (commonjsRemovePattern.test(content)) {
-    content = content.replace(commonjsRemovePattern, (match, callbackName) => {
-      return `subscription?.remove()`;
-    });
+  // STEP 2: Replace BackHandler.addEventListener(...) with subscription = BackHandler.addEventListener(...)
+  const addEventListenerPattern = /BackHandler\.addEventListener\(['"]hardwareBackPress['"]\s*,\s*(\w+)\)/g;
+  if (addEventListenerPattern.test(content)) {
+    content = content.replace(addEventListenerPattern, 'subscription = BackHandler.addEventListener(\'hardwareBackPress\', $1)');
     modified = true;
   }
 
-  // Now inject subscription variable if it doesn't exist
-  // Look for addEventListener and ensure we store the subscription
-  const addEventPattern = /(\s+)(const|let)?\s*(\w+\s*=\s*)?BackHandler\.addEventListener\(['"]hardwareBackPress['"],\s*(\w+)\)/;
-  const addEventPatternCommonjs = /(\s+)(const|let)?\s*(\w+\s*=\s*)?_reactNative\.BackHandler\.addEventListener\(['"]hardwareBackPress['"],\s*(\w+)\)/;
+  // STEP 3: Replace _reactNative.BackHandler.addEventListener with subscription = _reactNative.BackHandler.addEventListener
+  const addEventListenerCommonjsPattern = /_reactNative\.BackHandler\.addEventListener\(['"]hardwareBackPress['"]\s*,\s*(\w+)\)/g;
+  if (addEventListenerCommonjsPattern.test(content)) {
+    content = content.replace(addEventListenerCommonjsPattern, 'subscription = _reactNative.BackHandler.addEventListener(\'hardwareBackPress\', $1)');
+    modified = true;
+  }
 
-  if (addEventPattern.test(content) || addEventPatternCommonjs.test(content)) {
-    // Ensure subscription variable is declared
-    if (!content.includes('let subscription')) {
-      // Find the useEffect opening and add subscription declaration
-      const useEffectPattern = /useEffect\(\(\)\s*=>\s*\{/;
-      content = content.replace(useEffectPattern, (match) => {
-        return match + '\n    let subscription = null;';
-      });
-    }
+  // STEP 4: Replace BackHandler.removeEventListener with subscription?.remove()
+  const removeEventListenerPattern = /BackHandler\.removeEventListener\(['"]hardwareBackPress['"]\s*,\s*(\w+)\)/g;
+  if (removeEventListenerPattern.test(content)) {
+    content = content.replace(removeEventListenerPattern, 'subscription?.remove()');
+    modified = true;
+  }
 
-    // Replace addEventListener to store result
-    content = content.replace(/BackHandler\.addEventListener\(/g, 'subscription = BackHandler.addEventListener(');
-    content = content.replace(/_reactNative\.BackHandler\.addEventListener\(/g, 'subscription = _reactNative.BackHandler.addEventListener(');
+  // STEP 5: Replace _reactNative.BackHandler.removeEventListener with subscription?.remove()
+  const removeEventListenerCommonjsPattern = /_reactNative\.BackHandler\.removeEventListener\(['"]hardwareBackPress['"]\s*,\s*(\w+)\)/g;
+  if (removeEventListenerCommonjsPattern.test(content)) {
+    content = content.replace(removeEventListenerCommonjsPattern, 'subscription?.remove()');
     modified = true;
   }
 
