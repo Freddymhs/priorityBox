@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Text, useToast } from "native-base";
+import { Button, Modal, Text, useToast } from "native-base";
 import { useContext, useState, useCallback } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import {
@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TextInput,
 } from "react-native";
 import { MyContext } from "../../../lib/Context";
 import { useLists } from "../../../lib/hooks";
@@ -14,7 +15,6 @@ import {
   COLORS,
   COMMON_STYLES,
   COMPONENT_STYLES,
-  INPUT_STATES,
 } from "../../../lib/constants/theme";
 
 const styles = COMPONENT_STYLES.ModalAddList;
@@ -59,7 +59,7 @@ export const ModalAddList = ({ compactSize = false }) => {
           enabled={true}
           style={{ flex: 1, justifyContent: "center" }}
         >
-          <Modal.Content maxWidth="720px">
+          <Modal.Content maxWidth={720}>
             <Modal.CloseButton />
             <Modal.Header style={styles.header}>Crear Lista</Modal.Header>
 
@@ -135,26 +135,20 @@ const ModalBodyInputs = ({
 }) => {
   return (
     <>
-      <Input
-        variant="unstyled"
-        style={COMMON_STYLES.input}
-        _focus={INPUT_STATES.focusStyle}
+      <TextInput
+        style={COMMON_STYLES.textInput}
         placeholderTextColor={COLORS.textMuted}
         onChangeText={setTitleOfList}
         value={titleOfList}
-        w="100%"
         placeholder="nombre"
       />
-      <Input
-        variant="unstyled"
-        style={COMMON_STYLES.input}
-        _focus={INPUT_STATES.focusStyle}
+      <TextInput
+        style={COMMON_STYLES.textInputMultiline}
         placeholderTextColor={COLORS.textMuted}
-        w="100%"
-        h="20"
         onChangeText={setDescriptionOfList}
         value={descriptionOfList}
         placeholder="descripcion"
+        multiline
       />
     </>
   );
