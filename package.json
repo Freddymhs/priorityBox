@@ -17,7 +17,8 @@
     "ios:logs": "./scripts/view-device-logs.sh",
     "---build": ":",
     "ios:device:release": "expo run:ios --device --configuration Release",
-    "ios": "expo run:ios"
+    "ios": "expo run:ios",
+    "postinstall": "node scripts/patch-native-base.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
