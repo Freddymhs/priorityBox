@@ -1,4 +1,5 @@
 import * as React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -33,19 +34,13 @@ export const Navigator = () => {
         initialRouteName="MATRIZ"
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: COLORS.textLight,
+          tabBarActiveTintColor: COLORS.primary,
           tabBarInactiveTintColor: COLORS.textSecondary,
-          tabBarActiveBackgroundColor: COLORS.primary,
-          tabBarItemStyle: {
-            borderRadius: BORDER_RADIUS.medium,
-            marginHorizontal: SPACING.xs,
-            marginVertical: SPACING.sm,
-          },
           tabBarStyle: {
             backgroundColor: COLORS.card,
             borderTopWidth: 0,
-            paddingTop: SPACING.xs,
-            paddingBottom: SPACING.sm,
+            paddingTop: SPACING.sm,
+            paddingBottom: SPACING.md,
             paddingHorizontal: SPACING.md,
             height: 70,
             borderTopLeftRadius: BORDER_RADIUS.xxl,
@@ -60,7 +55,10 @@ export const Navigator = () => {
           tabBarLabelStyle: {
             fontSize: FONT_SIZES.small,
             fontWeight: "600",
-            marginTop: 2,
+            marginTop: 4,
+          },
+          tabBarIconStyle: {
+            marginBottom: 2,
           },
         }}
       >
