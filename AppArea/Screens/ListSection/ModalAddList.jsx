@@ -105,26 +105,25 @@ export const ModalAddList = ({ compactSize = false }) => {
 };
 
 const FooterButtons = ({ setModalVisible, createNewList, isLoading }) => {
-  const { Group } = Button;
+  const modalStyles = COMPONENT_STYLES.ModalAddItem;
   return (
-    <Group space={2}>
+    <Button.Group>
       <Button
-        style={styles.buttonGroup}
-        variant="ghost"
+        style={modalStyles.modalButtonCancel}
         onPress={() => setModalVisible(false)}
       >
-        <Text style={styles.textButtonGroup}>Cancelar</Text>
+        <Text style={modalStyles.modalButtonCancelText}>Cancelar</Text>
       </Button>
       <Button
-        style={styles.buttonGroup}
+        style={modalStyles.modalButtonSave}
         isDisabled={isLoading}
         onPress={createNewList}
       >
-        <Text style={styles.textButtonGroupSave}>
+        <Text style={modalStyles.modalButtonSaveText}>
           {isLoading ? "Guardando..." : "Guardar"}
         </Text>
       </Button>
-    </Group>
+    </Button.Group>
   );
 };
 
