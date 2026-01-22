@@ -1,5 +1,18 @@
+# Herramientas AI/desarrollo
+.claude/
+.serena/
+
+# Node.js
 node_modules/
-.env.local
+npm-debug.*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+
+# React Native/Expo
+.expo/
+.expo-shared/
 *.aab
 *.apks
 bundletool.jar
@@ -7,23 +20,29 @@ dist/
 dist
 last-build.txt
 build-output.log
-.expo/
-npm-debug.*
+web-build/
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
 
-# macOS
+# Sistema operativo
 .DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
 
 # Environment variables (SECURITY)
-.env.local
 .env
+.env.local
 .env.*.local
+!.env.example
 
 # Firebase credentials (SECURITY)
 google-services.json
@@ -32,14 +51,6 @@ google-services.json
 .yarn/cache
 .yarn/install-state.gz
 .yarn/unplugged
-package-lock.json
-
-# Temporary files
-agregar-listas-ejemplo.json
-WAYDROID-SETUP.md
-
-# MCP metadata (optional)
-.serena/
 
 # Native generated files (regenerate with: npx expo prebuild)
 android/
@@ -50,6 +61,10 @@ ios/*.xcworkspace/
 ios-install.log
 Podfile.lock
 *.xcuserstate
+
+# Temporary files
+agregar-listas-ejemplo.json
+WAYDROID-SETUP.md
 
 # Temporary scripts
 scripts/temp-*
