@@ -38,7 +38,6 @@ const QuadrantList = ({ items, onDeleteItem, category, subLabel }) => (
           contentContainerStyle={[styles.itemsStack, styles.itemsScroll]}
           showsVerticalScrollIndicator={false}
         >
-          {/* s */}
           {items.map((item, index) => (
             <QuadrantItem
               key={`${item.name}-${index}`}
