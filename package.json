@@ -11,6 +11,7 @@
     "start": "npx kill-port 8080 8081 && npx expo",
     "metro": "./scripts/start-metro-device.sh",
     "android": "expo run:android",
+    "android:release": "expo run:android --variant release",
     "setup:ios": "./scripts/setup-ios.sh",
     "ios:device": "./scripts/build-install-ios.sh",
     "ios:device:debug": "./scripts/install-ios-device-debug.sh",

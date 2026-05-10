@@ -25,9 +25,21 @@ npm run ios        # iOS Simulator
 # 1. Verificar que adb ve el dispositivo
 adb devices
 
-# 2. Compilar e instalar
+# 2. Compilar e instalar (DEBUG: necesita Metro corriendo en el PC)
 npm run android
+
+# o (RELEASE: app autónoma, NO necesita Metro ni PC tras instalar)
+npm run android:release
 ```
+
+### Debug vs Release
+
+| | Debug (`npm run android`) | Release (`npm run android:release`) |
+|---|---|---|
+| JS embebido en APK | ❌ se sirve desde Metro | ✅ embebido |
+| Necesita Metro/PC tras instalar | ✅ sí | ❌ no |
+| Tamaño / velocidad | mayor / lento | menor / rápido |
+| Para qué sirve | desarrollar (hot reload, errores verbosos) | usar como app real |
 
 ### Workaround MIUI / HyperOS (Xiaomi, Redmi, POCO)
 

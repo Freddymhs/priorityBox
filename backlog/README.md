@@ -38,6 +38,11 @@ Features pendientes y roadmap del proyecto PriorityBox.
    - Necesario para multi-dispositivo
    - Preparar para escalabilidad
 
+6. [Migrar NativeBase → Gluestack-ui](./06-migrar-nativebase-a-gluestack.md) ⭐⭐
+   - NativeBase 3 está deprecado (último release: mar-2023)
+   - Elimina parches manuales acumulados en `scripts/patch-native-base.js`
+   - Compatibilidad real con New Architecture (Fabric)
+
 ### 💡 Prioridad Baja
 5. [Exportar Datos](./05-exportar-datos.md) ⭐
    - Nice-to-have

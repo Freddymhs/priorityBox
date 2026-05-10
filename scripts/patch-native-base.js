@@ -1,12 +1,59 @@
 #!/usr/bin/env node
 /**
- * Patch native-base 3.4.28 for React Native 0.81.5+ BackHandler API compatibility
- * Fixes: _reactNative.BackHandler.removeEventListener is not a function
- * Solution: Use subscription.remove() instead of BackHandler.removeEventListener()
+ * Patches for native-base 3.4.28 on React Native 0.81.5+ (New Architecture / Fabric).
+ *
+ * 1) BackHandler API: replace removeEventListener with subscription.remove()
+ * 2) outlineWidth as String crashes RCTView under Fabric — coerce '0' to 0.
  */
 
 const fs = require('fs');
 const path = require('path');
+
+function walkDir(dir, ext, acc = []) {
+  if (!fs.existsSync(dir)) return acc;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) walkDir(full, ext, acc);
+    else if (ext.some((e) => entry.name.endsWith(e))) acc.push(full);
+  }
+  return acc;
+}
+
+function patchOutlineWidth() {
+  // Cubre todo el árbol de theme (decenas de ocurrencias en input.js, button.js, etc.)
+  // y utils/resolveStackStyleInput. Strings tipo '0', '2px', '4px' rompen RCTView en Fabric.
+  const roots = [
+    'node_modules/native-base/src/theme',
+    'node_modules/native-base/lib/module/theme',
+    'node_modules/native-base/lib/commonjs/theme',
+    'node_modules/native-base/src/utils',
+    'node_modules/native-base/lib/module/utils',
+    'node_modules/native-base/lib/commonjs/utils',
+  ];
+
+  const files = roots.flatMap((r) =>
+    walkDir(path.join(__dirname, '..', r), ['.js', '.ts'])
+  );
+
+  let totalPatched = 0;
+  files.forEach((filePath) => {
+    const original = fs.readFileSync(filePath, 'utf8');
+    const patched = original
+      .replace(/outlineWidth:\s*['"](\d+)(?:px)?['"]/g, 'outlineWidth: $1')
+      .replace(/outline:\s*['"]none['"],?\s*\n?/g, '');
+
+    if (patched !== original) {
+      fs.writeFileSync(filePath, patched);
+      totalPatched++;
+    }
+  });
+
+  if (totalPatched > 0) {
+    console.log(`✓ Patched outlineWidth/outline in ${totalPatched} native-base file(s)`);
+  }
+}
+
+patchOutlineWidth();
 
 const filesToPatch = [
   'node_modules/native-base/src/hooks/useKeyboardDismissable.ts',
