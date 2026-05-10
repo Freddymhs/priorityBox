@@ -17,6 +17,50 @@ npm run android    # Android
 npm run ios        # iOS Simulator
 ```
 
+## Android (primera vez)
+
+**Requisitos:** ADB, Java 17+, ANDROID_HOME apuntando al SDK, dispositivo Android con depuración USB activa.
+
+```bash
+# 1. Verificar que adb ve el dispositivo
+adb devices
+
+# 2. Compilar e instalar
+npm run android
+```
+
+### Workaround MIUI / HyperOS (Xiaomi, Redmi, POCO)
+
+`expo run:android` instala con el flag `adb install --user 0`, que MIUI bloquea con el error `INSTALL_FAILED_USER_RESTRICTED`. Dos pasos para evitarlo:
+
+**1. En el teléfono — Ajustes → Ajustes adicionales → Opciones de desarrollador:**
+- Activar **"Instalar vía USB"**
+- Activar **"Depuración USB (Ajustes de seguridad)"** si existe
+- Si "Instalar vía USB" no se deja activar, desactivar **"Optimización MIUI"** y reiniciar
+
+**2. Si MIUI sigue rechazando, usar `adb install` directo (sin `--user 0`):**
+
+```bash
+# Compila el APK debug
+npm run android   # va a fallar al instalar — ignora el error, el APK ya está listo
+
+# Instala manualmente (acepta el diálogo en el teléfono)
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+
+# Arranca Metro y abre la app
+npx expo start --dev-client --android
+```
+
+### Cambios diarios (Android)
+
+```bash
+# Si Metro sigue corriendo: solo guarda los archivos JS (hot reload).
+# Si Metro está cerrado:
+npx expo start --dev-client --android
+```
+
+Para cambios en código nativo (assets, app.json, dependencias nativas): re-ejecutar `npm run android` (o `adb install -r` con el workaround MIUI).
+
 ## iPhone (primera vez)
 
 **Requisitos:** Mac con Xcode + Apple ID gratuito (⚠️ app expira cada 7 días)
