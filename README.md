@@ -73,6 +73,16 @@ npx expo start --dev-client --android
 
 Para cambios en código nativo (assets, app.json, dependencias nativas): re-ejecutar `npm run android` (o `adb install -r` con el workaround MIUI).
 
+### Build release: OOM en `lintVitalAnalyzeRelease`
+
+La build release puede fallar con `OutOfMemoryError: Metaspace` al analizar Kotlin de `expo-modules-core`. Si pasa, aumentar memoria en `android/gradle.properties`:
+
+```
+org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=1024m
+```
+
+Y reiniciar el daemon: `cd android && ./gradlew --stop`. Este cambio NO se commitea (la carpeta `android/` está en `.gitignore` por ser regenerable con `expo prebuild`). Si en el futuro se quiere persistir, agregar `expo-build-properties` como plugin en `app.json`.
+
 ## iPhone (primera vez)
 
 **Requisitos:** Mac con Xcode + Apple ID gratuito (⚠️ app expira cada 7 días)

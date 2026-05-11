@@ -12,7 +12,11 @@ Actualmente:
 - No hay cuentas de usuario
 - Datos no están aislados por usuario
 
+## ⚠️ Motivación principal: SEGURIDAD
+La `databaseURL` y `apiKey` de Firebase están en `lib/init-firebase.js` (commiteadas en git). Sin Auth + Rules restrictivas, **cualquier persona que vea la URL puede leer, escribir o borrar `/listas` enteras**. Hoy mitigado solo por "obscuridad" (nadie tiene la URL excepto el dueño del repo). Cualquier distribución pública del código expone los datos. Las apiKeys de Firebase Web son identificadores públicos por diseño — su seguridad depende 100% de las Security Rules del proyecto.
+
 ## Valor
+- **Cierra el agujero de seguridad** (motivación principal)
 - Múltiples usuarios en el mismo dispositivo
 - Sincronización multi-dispositivo por usuario
 - Privacidad de datos personales
@@ -110,4 +114,4 @@ expo install @react-native-google-signin/google-signin
 - **Costos**: Firebase Auth es gratis hasta 10k MAU
 
 ## Prioridad
-⭐⭐ Media (importante para escalabilidad, no crítico para MVP)
+🔥 Alta (⭐⭐⭐) — el riesgo de seguridad debería subirla a P0 si la app se distribuye o el repo se hace público. Mantener en P-Media solo mientras sea uso personal con la URL oculta.

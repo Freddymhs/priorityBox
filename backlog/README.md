@@ -34,14 +34,20 @@ Features pendientes y roadmap del proyecto PriorityBox.
    - Mejora experiencia de usuario
    - Firebase ya maneja mucho automáticamente
 
-4. [Autenticación de Usuarios](./04-autenticacion-usuarios.md) ⭐⭐
-   - Necesario para multi-dispositivo
-   - Preparar para escalabilidad
+4. [Autenticación de Usuarios](./04-autenticacion-usuarios.md) ⭐⭐⭐
+   - **Riesgo de seguridad principal**: sin Auth + Rules, la `databaseURL` expuesta deja `/listas` accesible para cualquiera
+   - Habilita multi-dispositivo y escalabilidad
 
 6. [Migrar NativeBase → Gluestack-ui](./06-migrar-nativebase-a-gluestack.md) ⭐⭐
    - NativeBase 3 está deprecado (último release: mar-2023)
    - Elimina parches manuales acumulados en `scripts/patch-native-base.js`
    - Compatibilidad real con New Architecture (Fabric)
+
+7. [Rediseñar modelo de datos Firebase](./07-firebase-data-model.md) ⭐⭐
+   - Race conditions al editar desde 2 dispositivos a la vez
+   - `set()` reescribe árbol completo (lost-update)
+   - RTDB usada como REST (no real-time pese a lo que dice el README)
+   - Solo importa con uso concurrente — hoy funciona desde un solo dispositivo
 
 ### 💡 Prioridad Baja
 5. [Exportar Datos](./05-exportar-datos.md) ⭐
