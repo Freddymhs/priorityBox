@@ -14,20 +14,9 @@ Features pendientes y roadmap del proyecto PriorityBox.
 - UI con Native Base
 
 ❌ **NO implementado (pero mencionado en CV original):**
-- Sistema de gastos y presupuestos
-- Notas y reflexiones para items
 - Modo offline real con persistencia local
 
 ## Roadmap
-
-### 🔥 Prioridad Alta
-1. [Gestión y Registro de Gastos](./01-gestion-gastos.md) ⭐⭐⭐
-   - Diferenciador clave de la app
-   - Permite decisiones financieras informadas
-
-2. [Notas y Reflexiones](./02-notas-reflexiones.md) ⭐⭐⭐
-   - Core del concepto de "compra consciente"
-   - Facilita reflexión antes de comprar
 
 ### 🚀 Prioridad Media
 3. [Modo Offline Real](./03-modo-offline.md) ⭐⭐
@@ -48,11 +37,6 @@ Features pendientes y roadmap del proyecto PriorityBox.
    - `set()` reescribe árbol completo (lost-update)
    - RTDB usada como REST (no real-time pese a lo que dice el README)
    - Solo importa con uso concurrente — hoy funciona desde un solo dispositivo
-
-### 💡 Prioridad Baja
-5. [Exportar Datos](./05-exportar-datos.md) ⭐
-   - Nice-to-have
-   - Útil para análisis externo
 
 ## Cómo usar este backlog
 
